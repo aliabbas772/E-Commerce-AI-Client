@@ -22,6 +22,7 @@
     "@tailwindcss/vite": "^4.3.2",
     "graphql": "^16.14.2",
     "graphql-ws": "^6.0.8",
+    "lucide-react": "^1.24.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-redux": "^9.3.0",
