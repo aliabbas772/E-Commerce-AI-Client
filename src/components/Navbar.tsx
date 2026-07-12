@@ -1,7 +1,13 @@
-import { Search, ShoppingBag, User } from 'lucide-react'
+import { logout } from '@/store/slices/authSlice'
+import { RootState } from '@/store/store'
+import { Search, ShoppingBag, UserIcon } from 'lucide-react'
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 const Navbar = () => {
+    const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
+    const dispatch = useDispatch();
+
     return (
         <nav className='sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-md'>
             <div className='mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8'>
@@ -19,9 +25,23 @@ const Navbar = () => {
                         <Search size={19} strokeWidth={1.5} />
                     </button>
 
-                    <button aria-label="Account" className="hidden text-gray-500 transition-colors hover:text-gray-900 sm:block">
-                        <User size={19} strokeWidth={1.5} />
-                    </button>
+                    {isAuthenticated ? (
+                        <div className="flex items-center gap-4">
+                            <span className="hidden text-sm font-medium text-gray-700 sm:block">
+                                Hi, {user?.name}
+                            </span>
+                            <button
+                                onClick={() => dispatch(logout())}
+                                className="text-sm font-medium text-gray-500 hover:text-gray-900"
+                            >
+                                Logout
+                            </button>
+                        </div>
+                    ) : (
+                        <button aria-label="Account" className="hidden text-gray-500 transition-colors hover:text-gray-900 sm:block">
+                            <UserIcon size={19} strokeWidth={1.5} />
+                        </button>
+                    )}
 
                     <button aria-label="Cart" className="relative text-gray-500 transition-colors hover:text-gray-900">
                         <ShoppingBag size={19} strokeWidth={1.5} />

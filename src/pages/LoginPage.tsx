@@ -1,11 +1,15 @@
+import { login } from '@/store/slices/authSlice';
 import { Loader2, Lock, Mail } from 'lucide-react';
 import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, SetIsLoading] = useState(false);
     const [error, setError] = useState('');
+
+    const dispatch = useDispatch();
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -19,7 +23,7 @@ const LoginPage = () => {
         SetIsLoading(true);
 
         setTimeout(() => {
-            console.log(email, password);
+            dispatch(login({ name: email.split('@')[0], email }));
             SetIsLoading(false);
         }, 1000)
     }
