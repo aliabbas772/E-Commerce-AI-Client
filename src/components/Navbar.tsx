@@ -7,6 +7,9 @@ import { useDispatch, useSelector } from 'react-redux'
 const Navbar = () => {
     const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
     const dispatch = useDispatch();
+    const cartCount = useSelector((state: RootState) =>
+        state.cart.items.reduce((sum, item) => sum + item.quantity, 0)
+    )
 
     return (
         <nav className='sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-md'>
@@ -46,7 +49,7 @@ const Navbar = () => {
                     <button aria-label="Cart" className="relative text-gray-500 transition-colors hover:text-gray-900">
                         <ShoppingBag size={19} strokeWidth={1.5} />
                         <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-gray-900 text-[10px] font-medium text-white">
-                            2
+                            {cartCount}
                         </span>
                     </button>
                 </div>
