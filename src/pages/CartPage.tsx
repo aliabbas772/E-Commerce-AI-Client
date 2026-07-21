@@ -24,8 +24,8 @@ export default function CartPage() {
 
             <div className="flex flex-col gap-6">
                 {items.map((item) => (
-                    <div key={item.id} className="flex items-center gap-4 border-b border-gray-100 pb-6">
-                        <img src={item.imageUrl} alt={item.name} className="h-20 w-16 rounded-md object-cover" />
+                    <div key={`${item.productId}-${item.size}`} className="flex items-center gap-4 border-b border-gray-100 pb-6">
+                        <img src={item.image} alt={item.name} className="h-20 w-16 rounded-md object-cover" />
 
                         <div className="flex flex-1 items-center justify-between">
                             <div>
@@ -35,14 +35,14 @@ export default function CartPage() {
 
                             <div className="flex items-center gap-3">
                                 <button
-                                    onClick={() => dispatch(decreaseQuantity(item.id))}
+                                    onClick={() => dispatch(decreaseQuantity({ productId: item.productId, size: item.size }))}
                                     className="rounded-md border border-gray-200 p-1.5 text-gray-500 hover:border-gray-900 hover:text-gray-900"
                                 >
                                     <Minus size={14} />
                                 </button>
                                 <span className="w-4 text-center text-sm">{item.quantity}</span>
                                 <button
-                                    onClick={() => dispatch(increaseQuantity(item.id))}
+                                    onClick={() => dispatch(increaseQuantity({ productId: item.productId, size: item.size }))}
                                     className="rounded-md border border-gray-200 p-1.5 text-gray-500 hover:border-gray-900 hover:text-gray-900"
                                 >
                                     <Plus size={14} />
@@ -50,7 +50,7 @@ export default function CartPage() {
                             </div>
 
                             <button
-                                onClick={() => dispatch(removeFromCart(item.id))}
+                                onClick={() => dispatch(removeFromCart({ productId: item.productId, size: item.size }))}
                                 className="text-gray-300 hover:text-red-500"
                             >
                                 <X size={18} />
