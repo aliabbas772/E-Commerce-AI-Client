@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { addToCart } from '../store/slices/cartSlice'
 
@@ -16,12 +17,17 @@ export default function ProductCard({ productId, name, price, image, sizes }: Pr
 
     return (
         <div className="flex flex-col gap-3">
-            <div className="aspect-[3/4] overflow-hidden rounded-lg bg-gray-100">
-                <img src={image} alt={name} className="h-full w-full object-cover" />
-            </div>
+            <Link to={`/products/${productId}`}>
+                <div className="aspect-[3/4] overflow-hidden rounded-lg bg-gray-100">
+                    <img src={image} alt={name} className="h-full w-full object-cover transition-transform hover:scale-105" />
+                </div>
+            </Link>
+
             <div className="flex items-center justify-between">
                 <div>
-                    <h3 className="text-sm font-medium text-gray-900">{name}</h3>
+                    <Link to={`/products/${productId}`}>
+                        <h3 className="text-sm font-medium text-gray-900 hover:underline">{name}</h3>
+                    </Link>
                     <p className="text-sm text-gray-500">₹{price}</p>
                 </div>
 

@@ -16,7 +16,8 @@ const ProductListPage = () => {
         return <p className="px-6 py-12 text-center text-sm text-red-600">Failed to load products: {error.message}</p>
     }
 
-    const products = data?.getProducts?.data ?? []
+    const products = data?.getProducts?.data ?? [];
+    console.log(JSON.stringify(data, null, 2));
 
     return (
         <div className="mx-auto max-w-6xl px-6 py-12">
