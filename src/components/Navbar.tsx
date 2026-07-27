@@ -1,23 +1,25 @@
-import { logout } from '@/store/slices/authSlice'
-import { RootState } from '@/store/store'
-import { Search, ShoppingBag, UserIcon } from 'lucide-react'
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { Search, User as UserIcon, ShoppingBag } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import type { RootState } from '../store/store'
+import { logout } from '../store/slices/authSlice'
 
-const Navbar = () => {
-    const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
-    const dispatch = useDispatch();
+export default function Navbar() {
+    const { isAuthenticated, user } = useSelector((state: RootState) => state.auth)
     const cartCount = useSelector((state: RootState) =>
         state.cart.items.reduce((sum, item) => sum + item.quantity, 0)
     )
+    const dispatch = useDispatch()
 
     return (
-        <nav className='sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-md'>
-            <div className='mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8'>
-                <span className='text-lg font-semibold tracking-tight text-gray-900'>Aliy's</span>
+        <nav className="sticky top-0 z-50 border-b border-gray-100 bg-white/80 backdrop-blur-md">
+            <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
+                <Link to="/" className="text-lg font-semibold tracking-tight text-gray-900">
+                    Ecommerce<span className="text-gray-400">AI</span>
+                </Link>
 
-                <div className='hidden gap-10 text-[13px] font-medium uppercase tracking-wider text-gray-500 md:flex'>
-                    <a href="#" className="transition-colors hover:text-gray-900">Shop</a>
+                <div className="hidden gap-10 text-[13px] font-medium uppercase tracking-wider text-gray-500 md:flex">
+                    <Link to="/" className="transition-colors hover:text-gray-900">Shop</Link>
                     <a href="#" className="transition-colors hover:text-gray-900">New Arrivals</a>
                     <a href="#" className="transition-colors hover:text-gray-900">Collections</a>
                     <a href="#" className="transition-colors hover:text-gray-900">Sale</a>
@@ -41,21 +43,21 @@ const Navbar = () => {
                             </button>
                         </div>
                     ) : (
-                        <button aria-label="Account" className="hidden text-gray-500 transition-colors hover:text-gray-900 sm:block">
+                        <Link to="/login" aria-label="Account" className="hidden text-gray-500 transition-colors hover:text-gray-900 sm:block">
                             <UserIcon size={19} strokeWidth={1.5} />
-                        </button>
+                        </Link>
                     )}
 
-                    <button aria-label="Cart" className="relative text-gray-500 transition-colors hover:text-gray-900">
+                    <Link to="/cart" aria-label="Cart" className="relative text-gray-500 transition-colors hover:text-gray-900">
                         <ShoppingBag size={19} strokeWidth={1.5} />
-                        <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-gray-900 text-[10px] font-medium text-white">
-                            {cartCount}
-                        </span>
-                    </button>
+                        {cartCount > 0 && (
+                            <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-gray-900 text-[10px] font-medium text-white">
+                                {cartCount}
+                            </span>
+                        )}
+                    </Link>
                 </div>
             </div>
         </nav>
     )
 }
-
-export default Navbar
