@@ -1,8 +1,10 @@
 import { Search, User as UserIcon, ShoppingBag } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
+import { useQuery } from '@apollo/client/react'
 import type { RootState } from '../store/store'
 import { logout } from '../store/slices/authSlice'
+import { GET_CATEGORIES } from '../features/categories/queries'
 
 export default function Navbar() {
     const { isAuthenticated, user } = useSelector((state: RootState) => state.auth)
@@ -10,6 +12,13 @@ export default function Navbar() {
         state.cart.items.reduce((sum, item) => sum + item.quantity, 0)
     )
     const dispatch = useDispatch()
+
+    const { data } = useQuery(GET_CATEGORIES)
+    const categories = data?.getCategories ?? []
+    console.log(categories)
+
+    const [searchParams] = useSearchParams()
+    const activeCategory = searchParams.get('category')
 
     return (
         <nav className="sticky top-0 z-50 border-b border-gray-100 bg-white/80 backdrop-blur-md">
@@ -19,10 +28,21 @@ export default function Navbar() {
                 </Link>
 
                 <div className="hidden gap-10 text-[13px] font-medium uppercase tracking-wider text-gray-500 md:flex">
-                    <Link to="/" className="transition-colors hover:text-gray-900">Shop</Link>
-                    <a href="#" className="transition-colors hover:text-gray-900">New Arrivals</a>
-                    <a href="#" className="transition-colors hover:text-gray-900">Collections</a>
-                    <a href="#" className="transition-colors hover:text-gray-900">Sale</a>
+                    <Link
+                        to="/"
+                        className={`transition-colors hover:text-gray-900 ${!activeCategory ? 'text-gray-900' : ''}`}
+                    >
+                        Shop
+                    </Link>
+                    {categories.map((cat: any) => (
+                        <Link
+                            key={cat._id}
+                            to={`/products?category=${cat._id}`}
+                            className={`transition-colors hover:text-gray-900 ${activeCategory === cat._id ? 'text-gray-900' : ''}`}
+                        >
+                            {cat.name}
+                        </Link>
+                    ))}
                 </div>
 
                 <div className="flex items-center gap-6">
