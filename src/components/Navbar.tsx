@@ -1,10 +1,12 @@
-import { Search, User as UserIcon, ShoppingBag } from 'lucide-react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { useState, useRef, useEffect } from 'react'
+import { Search, User as UserIcon, ShoppingBag, ChevronDown, Package, LogOut } from 'lucide-react'
+import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { useQuery } from '@apollo/client/react'
+import { useMutation, useQuery } from '@apollo/client/react'
 import type { RootState } from '../store/store'
 import { logout } from '../store/slices/authSlice'
 import { GET_CATEGORIES } from '../features/categories/queries'
+import { LOGOUT } from '@/features/auth/queries'
 
 export default function Navbar() {
     const { isAuthenticated, user } = useSelector((state: RootState) => state.auth)
@@ -12,13 +14,40 @@ export default function Navbar() {
         state.cart.items.reduce((sum, item) => sum + item.quantity, 0)
     )
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
+    const [logoutMutation] = useMutation(LOGOUT)
     const { data } = useQuery(GET_CATEGORIES)
     const categories = data?.getCategories ?? []
-    console.log(categories)
 
     const [searchParams] = useSearchParams()
     const activeCategory = searchParams.get('category')
+
+    const [dropdownOpen, setDropdownOpen] = useState(false)
+    const dropdownRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setDropdownOpen(false)
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => document.removeEventListener('mousedown', handleClickOutside)
+    }, [])
+
+     const handleLogout = async () => {
+        try {
+            await logoutMutation()
+        } catch (err) {
+            // Even if the server call fails (e.g. offline, expired token),
+            // we still want to log the user out locally below.
+            console.error('Logout mutation failed:', err)
+        }
+        dispatch(logout())
+        setDropdownOpen(false)
+        navigate('/')
+    }
 
     return (
         <nav className="sticky top-0 z-50 border-b border-gray-100 bg-white/80 backdrop-blur-md">
@@ -51,16 +80,35 @@ export default function Navbar() {
                     </button>
 
                     {isAuthenticated ? (
-                        <div className="flex items-center gap-4">
-                            <span className="hidden text-sm font-medium text-gray-700 sm:block">
-                                Hi, {user?.name}
-                            </span>
+                        <div className="relative" ref={dropdownRef}>
                             <button
-                                onClick={() => dispatch(logout())}
-                                className="text-sm font-medium text-gray-500 hover:text-gray-900"
+                                onClick={() => setDropdownOpen((prev) => !prev)}
+                                className="flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-gray-900"
                             >
-                                Logout
+                                <span className="hidden sm:block">Hi, {user?.name}</span>
+                                <UserIcon size={19} strokeWidth={1.5} className="sm:hidden" />
+                                <ChevronDown size={14} strokeWidth={1.5} className={`transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
                             </button>
+
+                            {dropdownOpen && (
+                                <div className="absolute right-0 top-full mt-2 w-44 rounded-lg border border-gray-100 bg-white py-1 shadow-lg">
+                                    <Link
+                                        to="/account/orders"
+                                        onClick={() => setDropdownOpen(false)}
+                                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                                    >
+                                        <Package size={15} strokeWidth={1.5} />
+                                        My Orders
+                                    </Link>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
+                                    >
+                                        <LogOut size={15} strokeWidth={1.5} />
+                                        Logout
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     ) : (
                         <Link to="/login" aria-label="Account" className="hidden text-gray-500 transition-colors hover:text-gray-900 sm:block">

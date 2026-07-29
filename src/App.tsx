@@ -5,6 +5,10 @@ import ProductListPage from "./pages/ProductListPage"
 import CartPage from "./pages/CartPage"
 import ProductDetailPage from "./pages/ProductDetailPage"
 import CheckoutPage from "./pages/CheckoutPage"
+import OrdersPage from "./pages/OrdersPage"
+import OrderDetailPage from "./pages/OrderDetailPage"
+import ProtectedRoute from "./components/ProtectedRoute"
+import RegisterPage from "./pages/RegisterPage"
 
 function App() {
   return (
@@ -16,6 +20,12 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+
+        <Route element={<ProtectedRoute />}>
+          <Route path="/account/orders" element={<OrdersPage />} />
+          <Route path="/account/orders/:id" element={<OrderDetailPage />} />
+        </Route>
       </Routes>
     </div>
   )
