@@ -9,6 +9,7 @@ import OrdersPage from "./pages/OrdersPage"
 import OrderDetailPage from "./pages/OrderDetailPage"
 import ProtectedRoute from "./components/ProtectedRoute"
 import RegisterPage from "./pages/RegisterPage"
+import ForgotPasswordPage from "./pages/ForgotPasswordPage"
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
         <Route element={<ProtectedRoute />}>
           <Route path="/account/orders" element={<OrdersPage />} />

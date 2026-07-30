@@ -6,6 +6,8 @@ import { useNavigate, Link } from 'react-router-dom'
 import { LOGIN_WITH_PASSWORD, LOGIN_WITH_OTP, VERIFY_LOGIN_OTP } from '../features/auth/queries'
 import { login } from '../store/slices/authSlice'
 import { getRecaptchaToken } from '../lib/loadRecaptcha'
+import GoogleSignInButton from '../components/GoogleSignInButton'
+import { GOOGLE_AUTH } from '../features/auth/queries'
 
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY
 
@@ -36,6 +38,26 @@ export default function LoginPage() {
             setFormError(error.message)
         },
     })
+
+    const [googleAuth] = useMutation(GOOGLE_AUTH, {
+        onCompleted: (data) => {
+            dispatch(
+                login({
+                    user: data.googleAuth.user,
+                    token: data.googleAuth.accessToken,
+                })
+            )
+            navigate('/')
+        },
+        onError: (error) => {
+            setFormError(error.message)
+        },
+    })
+
+    const handleGoogleCredential = (credential: string) => {
+        setFormError('')
+        googleAuth({ variables: { googleToken: credential } })
+    }
 
     const [loginWithOTP, { loading: otpSendLoading }] = useMutation(LOGIN_WITH_OTP, {
         onCompleted: () => {
@@ -145,6 +167,12 @@ export default function LoginPage() {
                                 className="w-full rounded-lg border border-gray-200 py-3 pl-11 pr-4 text-sm outline-none transition-colors focus:border-gray-900"
                             />
                         </div>
+                        <Link
+                            to="/forgot-password"
+                            className="-mt-2 text-right text-xs text-gray-500 hover:text-gray-900"
+                        >
+                            Forgot password?
+                        </Link>
 
                         {formError && <p className="text-sm text-red-600">{formError}</p>}
 
@@ -171,6 +199,19 @@ export default function LoginPage() {
                             Sign in with OTP instead
                         </button>
                     </form>
+                )}
+                {mode === 'password' && (
+                    <div className="mt-4 flex items-center gap-3">
+                        <div className="h-px flex-1 bg-gray-200" />
+                        <span className="text-xs text-gray-400">OR</span>
+                        <div className="h-px flex-1 bg-gray-200" />
+                    </div>
+                )}
+
+                {mode === 'password' && (
+                    <div className="mt-4">
+                        <GoogleSignInButton onCredential={handleGoogleCredential} />
+                    </div>
                 )}
 
                 {mode === 'otp-form' && (

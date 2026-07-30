@@ -81,3 +81,51 @@ export const LOGOUT = gql`
     }
   }
 `;
+
+export const SEND_FORGOT_PASSWORD_OTP = gql`
+  mutation SendForgotPasswordOTP($email: String!, $captchaToken: String!) {
+    sendForgotPasswordOTP(email: $email, captchaToken: $captchaToken) {
+      message
+    }
+  }
+`;
+
+export const VERIFY_FORGOT_PASSWORD_OTP = gql`
+  mutation VerifyForgotPasswordOTP($email: String!, $otp: String!) {
+    verifyForgotPasswordOTP(email: $email, otp: $otp) {
+      message
+    }
+  }
+`;
+
+export const UPDATE_PASSWORD = gql`
+  mutation UpdatePassword(
+    $email: String!
+    $password: String!
+    $confirmPassword: String!
+  ) {
+    updatePassword(
+      email: $email
+      password: $password
+      confirmPassword: $confirmPassword
+    ) {
+      message
+    }
+  }
+`;
+
+export const GOOGLE_AUTH = gql`
+  mutation GoogleAuth($googleToken: String!) {
+    googleAuth(googleToken: $googleToken) {
+      accessToken
+      user {
+        _id
+        name
+        email
+        phone
+        role
+        isVerified
+      }
+    }
+  }
+`;
