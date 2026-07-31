@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useMutation } from '@apollo/client/react'
 import { User as UserIcon, Mail, Lock, Phone, Loader2, ShieldCheck } from 'lucide-react'
 import { useDispatch } from 'react-redux'
@@ -66,10 +66,10 @@ export default function RegisterPage() {
         },
     })
 
-    const handleGoogleCredential = (credential: string) => {
+    const handleGoogleCredential = useCallback((credential: string) => {
         setFormError('')
         googleAuth({ variables: { googleToken: credential } })
-    }
+    }, [googleAuth])
 
     const handleSendOTP = async (e: React.FormEvent) => {
         e.preventDefault()

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { loadGoogleScript } from '../lib/loadGoogleAuth'
+import { initializeGoogleAuth, loadGoogleScript } from '../lib/loadGoogleAuth'
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID
 
@@ -13,16 +13,11 @@ export default function GoogleSignInButton({ onCredential }: GoogleSignInButtonP
     useEffect(() => {
         let cancelled = false
 
-        loadGoogleScript().then(() => {
+        initializeGoogleAuth(GOOGLE_CLIENT_ID, (response) => {
+            onCredential(response.credential)
+        }).then(async () => {
+            await loadGoogleScript()
             if (cancelled || !buttonRef.current) return
-
-            // @ts-ignore - google is injected globally by Google's script
-            window.google.accounts.id.initialize({
-                client_id: GOOGLE_CLIENT_ID,
-                callback: (response: { credential: string }) => {
-                    onCredential(response.credential)
-                },
-            })
 
             // @ts-ignore
             window.google.accounts.id.renderButton(buttonRef.current, {

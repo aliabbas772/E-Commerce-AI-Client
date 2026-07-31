@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useMutation } from '@apollo/client/react'
 import { Mail, Lock, Loader2, ShieldCheck } from 'lucide-react'
 import { useDispatch } from 'react-redux'
@@ -54,10 +54,10 @@ export default function LoginPage() {
         },
     })
 
-    const handleGoogleCredential = (credential: string) => {
+    const handleGoogleCredential = useCallback((credential: string) => {
         setFormError('')
         googleAuth({ variables: { googleToken: credential } })
-    }
+    }, [googleAuth])
 
     const [loginWithOTP, { loading: otpSendLoading }] = useMutation(LOGIN_WITH_OTP, {
         onCompleted: () => {

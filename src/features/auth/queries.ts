@@ -129,3 +129,18 @@ export const GOOGLE_AUTH = gql`
     }
   }
 `;
+export const REFRESH_TOKEN = gql`
+  mutation RefreshToken {
+    refreshToken {
+      accessToken
+      user {
+        _id
+        name
+        email
+        phone
+        role
+        isVerified
+      }
+    }
+  }
+`;

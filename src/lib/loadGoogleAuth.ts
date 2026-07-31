@@ -1,4 +1,5 @@
 let googleScriptPromise: Promise<void> | null = null;
+let initialized = false;
 
 export function loadGoogleScript(): Promise<void> {
   if (googleScriptPromise) return googleScriptPromise;
@@ -22,4 +23,23 @@ export function loadGoogleScript(): Promise<void> {
   });
 
   return googleScriptPromise;
+}
+
+export async function initializeGoogleAuth(
+  clientId: string,
+  callback: (response: { credential: string }) => void,
+): Promise<void> {
+  await loadGoogleScript();
+
+  // @ts-ignore - google is injected globally by Google's script
+  window.google.accounts.id.initialize({
+    client_id: clientId,
+    callback,
+  });
+
+  initialized = true;
+}
+
+export function isGoogleAuthInitialized(): boolean {
+  return initialized;
 }
