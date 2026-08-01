@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import { useMutation } from '@apollo/client/react'
-import { Mail, Lock, Loader2, ShieldCheck } from 'lucide-react'
+import { Mail, Lock, Loader2, ShieldCheck, Eye, EyeOff } from 'lucide-react'
 import { useDispatch } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { LOGIN_WITH_PASSWORD, LOGIN_WITH_OTP, VERIFY_LOGIN_OTP } from '../features/auth/queries'
@@ -20,6 +20,7 @@ export default function LoginPage() {
     const [password, setPassword] = useState('')
     const [otp, setOtp] = useState('')
     const [formError, setFormError] = useState('')
+    const [showPassword, setShowPassword] = useState(false)
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -160,12 +161,20 @@ export default function LoginPage() {
                         <div className="relative">
                             <Lock size={18} strokeWidth={1.5} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
                             <input
-                                type="password"
+                                type={showPassword ? 'text' : 'password'}
                                 placeholder="Password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full rounded-lg border border-gray-200 py-3 pl-11 pr-4 text-sm outline-none transition-colors focus:border-gray-900"
+                                className="w-full rounded-lg border border-gray-200 py-3 pl-11 pr-11 text-sm outline-none transition-colors focus:border-gray-900"
                             />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword((prev) => !prev)}
+                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                tabIndex={-1}
+                            >
+                                {showPassword ? <EyeOff size={18} strokeWidth={1.5} /> : <Eye size={18} strokeWidth={1.5} />}
+                            </button>
                         </div>
                         <Link
                             to="/forgot-password"

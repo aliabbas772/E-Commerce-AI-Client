@@ -10,6 +10,12 @@ import OrderDetailPage from "./pages/OrderDetailPage"
 import ProtectedRoute from "./components/ProtectedRoute"
 import RegisterPage from "./pages/RegisterPage"
 import ForgotPasswordPage from "./pages/ForgotPasswordPage"
+import AdminRoute from "./components/AdminRoute"
+import AdminLayout from "./components/AdminLayout"
+import AdminOverviewPage from "./pages/admin/AdminOverviewPage"
+import AdminCategoriesPage from "./pages/admin/AdminCategoriesPage"
+import AdminProductsPage from "./pages/admin/AdminProductsPage"
+import AdminManagementPage from "./pages/admin/AdminManagementPage"
 
 function App() {
   return (
@@ -27,6 +33,15 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/account/orders" element={<OrdersPage />} />
           <Route path="/account/orders/:id" element={<OrderDetailPage />} />
+        </Route>
+
+        <Route element={<AdminRoute />}>
+          <Route element={<AdminLayout />}>
+            <Route path="/admin" element={<AdminOverviewPage />} />
+            <Route path="/admin/categories" element={<AdminCategoriesPage />} />
+            <Route path="/admin/products" element={<AdminProductsPage />} />
+            <Route path="/admin/admins" element={<AdminManagementPage />} />
+          </Route>
         </Route>
       </Routes>
     </div>

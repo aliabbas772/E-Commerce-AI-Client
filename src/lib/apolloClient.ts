@@ -6,7 +6,8 @@ import {
   Observable,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { onError } from "@apollo/client/link/error";
+import { ErrorLink } from "@apollo/client/link/error";
+import { CombinedGraphQLErrors } from "@apollo/client/errors";
 import { REFRESH_TOKEN } from "../features/auth/queries";
 import { store } from "../store/store";
 import { login, logout } from "../store/slices/authSlice";
@@ -52,6 +53,7 @@ async function refreshAccessToken(): Promise<string | null> {
 
       const { accessToken, user } = result.data.refreshToken;
       localStorage.setItem("token", accessToken);
+      localStorage.setItem("user", JSON.stringify(user));
       store.dispatch(login({ user, token: accessToken }));
 
       return accessToken;
@@ -66,33 +68,35 @@ async function refreshAccessToken(): Promise<string | null> {
   return refreshPromise;
 }
 
-const errorLink = onError(({ graphQLErrors, operation, forward }) => {
-  if (graphQLErrors) {
-    for (const err of graphQLErrors) {
-      if (err.extensions?.code === "UNAUTHENTICATED") {
-        return new Observable((observer) => {
-          refreshAccessToken().then((newToken) => {
-            if (!newToken) {
-              observer.error(err);
-              return;
-            }
+const errorLink = new ErrorLink(({ error, operation, forward }) => {
+  if (CombinedGraphQLErrors.is(error)) {
+    const isUnauthenticated = error.errors.some(
+      (e) => e.extensions?.code === "UNAUTHENTICATED",
+    );
 
-            const oldHeaders = operation.getContext().headers;
-            operation.setContext({
-              headers: {
-                ...oldHeaders,
-                authorization: `Bearer ${newToken}`,
-              },
-            });
+    if (isUnauthenticated) {
+      return new Observable((observer) => {
+        refreshAccessToken().then((newToken) => {
+          if (!newToken) {
+            observer.error(error);
+            return;
+          }
 
-            forward(operation).subscribe({
-              next: observer.next.bind(observer),
-              error: observer.error.bind(observer),
-              complete: observer.complete.bind(observer),
-            });
+          const oldHeaders = operation.getContext().headers;
+          operation.setContext({
+            headers: {
+              ...oldHeaders,
+              authorization: `Bearer ${newToken}`,
+            },
+          });
+
+          forward(operation).subscribe({
+            next: observer.next.bind(observer),
+            error: observer.error.bind(observer),
+            complete: observer.complete.bind(observer),
           });
         });
-      }
+      });
     }
   }
 });
