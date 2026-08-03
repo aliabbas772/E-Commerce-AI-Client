@@ -7,6 +7,7 @@ import type { RootState } from '../store/store'
 import { logout } from '../store/slices/authSlice'
 import { GET_CATEGORIES } from '../features/categories/queries'
 import { LOGOUT } from '@/features/auth/queries'
+import { useCart } from '@/features/cart/useCart'
 
 export default function Navbar() {
     const { isAuthenticated, user } = useSelector((state: RootState) => state.auth)
@@ -15,6 +16,7 @@ export default function Navbar() {
     )
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const { itemCount } = useCart()
 
     const [logoutMutation] = useMutation(LOGOUT)
     const { data } = useQuery(GET_CATEGORIES)
@@ -36,7 +38,7 @@ export default function Navbar() {
         return () => document.removeEventListener('mousedown', handleClickOutside)
     }, [])
 
-     const handleLogout = async () => {
+    const handleLogout = async () => {
         try {
             await logoutMutation()
         } catch (err) {

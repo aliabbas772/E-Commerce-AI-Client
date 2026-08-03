@@ -11,6 +11,7 @@ export const GET_PRODUCTS = gql`
         images
         averageRating
         stock
+        sizes
       }
       totalCount
       totalPages

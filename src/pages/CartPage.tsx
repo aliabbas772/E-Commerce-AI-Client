@@ -1,13 +1,17 @@
-import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { Minus, Plus, X, ShoppingBag } from 'lucide-react'
+import { useSelector } from 'react-redux'
 import type { RootState } from '../store/store'
-import { removeFromCart, increaseQuantity, decreaseQuantity } from '../store/slices/cartSlice'
+import { useCart } from '../features/cart/useCart'
 
 export default function CartPage() {
-    const items = useSelector((state: RootState) => state.cart.items)
-    const dispatch = useDispatch()
+    const { items, subtotal, loading, increaseQuantity, decreaseQuantity, removeItem } = useCart()
+    const { isAuthenticated } = useSelector((state: RootState) => state.auth)
+    const navigate = useNavigate()
 
-    const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+    if (loading) {
+        return <p className="px-6 py-32 text-center text-sm text-gray-500">Loading cart...</p>
+    }
 
     if (items.length === 0) {
         return (
@@ -16,6 +20,14 @@ export default function CartPage() {
                 <p className="text-sm text-gray-500">Your cart is empty.</p>
             </div>
         )
+    }
+
+    const handleCheckout = () => {
+        if (!isAuthenticated) {
+            navigate('/login')
+            return
+        }
+        navigate('/checkout')
     }
 
     return (
@@ -30,19 +42,19 @@ export default function CartPage() {
                         <div className="flex flex-1 items-center justify-between">
                             <div>
                                 <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
-                                <p className="text-sm text-gray-500">₹{item.price}</p>
+                                <p className="text-sm text-gray-500">₹{item.price} · Size {item.size}</p>
                             </div>
 
                             <div className="flex items-center gap-3">
                                 <button
-                                    onClick={() => dispatch(decreaseQuantity({ productId: item.productId, size: item.size }))}
+                                    onClick={() => decreaseQuantity(item.productId, item.size)}
                                     className="rounded-md border border-gray-200 p-1.5 text-gray-500 hover:border-gray-900 hover:text-gray-900"
                                 >
                                     <Minus size={14} />
                                 </button>
                                 <span className="w-4 text-center text-sm">{item.quantity}</span>
                                 <button
-                                    onClick={() => dispatch(increaseQuantity({ productId: item.productId, size: item.size }))}
+                                    onClick={() => increaseQuantity(item.productId, item.size)}
                                     className="rounded-md border border-gray-200 p-1.5 text-gray-500 hover:border-gray-900 hover:text-gray-900"
                                 >
                                     <Plus size={14} />
@@ -50,7 +62,7 @@ export default function CartPage() {
                             </div>
 
                             <button
-                                onClick={() => dispatch(removeFromCart({ productId: item.productId, size: item.size }))}
+                                onClick={() => removeItem(item.productId, item.size)}
                                 className="text-gray-300 hover:text-red-500"
                             >
                                 <X size={18} />
@@ -64,6 +76,19 @@ export default function CartPage() {
                 <span>Subtotal</span>
                 <span>₹{subtotal}</span>
             </div>
+
+            <button
+                onClick={handleCheckout}
+                className="mt-6 w-full rounded-lg bg-gray-900 py-3 text-sm font-medium text-white transition-colors hover:bg-gray-800"
+            >
+                Proceed to Checkout
+            </button>
+
+            {!isAuthenticated && (
+                <p className="mt-3 text-center text-xs text-gray-400">
+                    You'll need to sign in to complete checkout
+                </p>
+            )}
         </div>
     )
 }

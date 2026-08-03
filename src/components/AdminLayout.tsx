@@ -1,5 +1,6 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import { LayoutGrid, Package, Shield, ShoppingBag } from 'lucide-react'
+import { ShoppingBag as OrdersIcon } from 'lucide-react'
 
 export default function AdminLayout() {
     const linkClass = ({ isActive }: { isActive: boolean }) =>
@@ -28,6 +29,10 @@ export default function AdminLayout() {
                     <NavLink to="/admin/admins" className={linkClass}>
                         <Shield size={16} strokeWidth={1.5} />
                         Admins
+                    </NavLink>
+                    <NavLink to="/admin/orders" className={linkClass}>
+                        <OrdersIcon size={16} strokeWidth={1.5} />
+                        Orders
                     </NavLink>
                 </nav>
             </aside>

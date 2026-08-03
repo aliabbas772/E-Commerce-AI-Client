@@ -9,6 +9,7 @@ import { CREATE_ORDER, VERIFY_PAYMENT } from '../features/checkout/queries'
 import { GET_MY_ADDRESSES } from '../features/addresses/queries'
 import { loadRazorpayScript } from '../lib/loadRazorpay'
 import AddressForm from '../components/AddressForm'
+import { useCart } from '@/features/cart/useCart'
 
 declare global {
     interface Window {
@@ -17,10 +18,11 @@ declare global {
 }
 
 export default function CheckoutPage() {
-    const items = useSelector((state: RootState) => state.cart.items)
+    // const items = useSelector((state: RootState) => state.cart.items)
     const user = useSelector((state: RootState) => state.auth.user)
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const { items, subtotal } = useCart()
 
     const { data: addressData, loading: addressLoading } = useQuery(GET_MY_ADDRESSES)
 
@@ -40,7 +42,7 @@ export default function CheckoutPage() {
         setSelectedAddressId(defaultAddr._id)
     }
 
-    const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+    // const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
 
     const handleAddressCreated = (newAddressId: string) => {
         setSelectedAddressId(newAddressId)

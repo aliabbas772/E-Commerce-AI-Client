@@ -1,13 +1,15 @@
 import { useState, useCallback } from 'react'
 import { useMutation } from '@apollo/client/react'
 import { Mail, Lock, Loader2, ShieldCheck, Eye, EyeOff } from 'lucide-react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { LOGIN_WITH_PASSWORD, LOGIN_WITH_OTP, VERIFY_LOGIN_OTP } from '../features/auth/queries'
 import { login } from '../store/slices/authSlice'
 import { getRecaptchaToken } from '../lib/loadRecaptcha'
 import GoogleSignInButton from '../components/GoogleSignInButton'
 import { GOOGLE_AUTH } from '../features/auth/queries'
+import { mergeGuestCartOnLogin } from '../features/cart/mergeGuestCart'
+import { RootState } from '@/store/store'
 
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY
 
@@ -25,6 +27,8 @@ export default function LoginPage() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
+    const guestCartItems = useSelector((state: RootState) => state.guestCart.items)
+
     const [loginWithPassword, { loading: passwordLoading }] = useMutation(LOGIN_WITH_PASSWORD, {
         onCompleted: (data) => {
             dispatch(
@@ -33,6 +37,7 @@ export default function LoginPage() {
                     token: data.loginWithPassword.accessToken,
                 })
             )
+            mergeGuestCartOnLogin(guestCartItems, dispatch)
             navigate('/')
         },
         onError: (error) => {
@@ -48,6 +53,7 @@ export default function LoginPage() {
                     token: data.googleAuth.accessToken,
                 })
             )
+            mergeGuestCartOnLogin(guestCartItems, dispatch)
             navigate('/')
         },
         onError: (error) => {
@@ -77,6 +83,7 @@ export default function LoginPage() {
                     token: data.verifyLoginOTP.accessToken,
                 })
             )
+            mergeGuestCartOnLogin(guestCartItems, dispatch)
             navigate('/')
         },
         onError: (error) => {

@@ -5,12 +5,15 @@ import { useDispatch } from 'react-redux'
 import { GET_PRODUCT_BY_ID } from '../features/products/queries'
 import { addToCart } from '../store/slices/cartSlice'
 import ReviewsSection from '../components/ReviewsSection'
+import { useAddToCart } from '@/features/cart/useAddToCart'
 
 export default function ProductDetailPage() {
     const { id } = useParams<{ id: string }>()
     const dispatch = useDispatch()
     const [selectedSize, setSelectedSize] = useState<string | null>(null)
     const [activeImage, setActiveImage] = useState(0)
+
+    const addToCart = useAddToCart()
 
     const { data, loading, error } = useQuery(GET_PRODUCT_BY_ID, {
         variables: { id },
@@ -28,15 +31,15 @@ export default function ProductDetailPage() {
 
     const handleAddToCart = () => {
         if (!selectedSize) return
-        dispatch(
-            addToCart({
-                productId: product._id,
-                name: product.name,
-                price: product.price,
-                image: product.images[0],
-                size: selectedSize,
-            })
-        )
+
+        addToCart({
+            productId: product._id,
+            name: product.name,
+            price: product.price,
+            image: product.images[0],
+            size: selectedSize,
+        })
+
     }
 
     return (

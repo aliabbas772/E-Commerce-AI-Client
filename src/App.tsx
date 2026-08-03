@@ -16,6 +16,7 @@ import AdminOverviewPage from "./pages/admin/AdminOverviewPage"
 import AdminCategoriesPage from "./pages/admin/AdminCategoriesPage"
 import AdminProductsPage from "./pages/admin/AdminProductsPage"
 import AdminManagementPage from "./pages/admin/AdminManagementPage"
+import AdminOrdersPage from "./pages/admin/AdminOrdersPage"
 
 function App() {
   return (
@@ -26,13 +27,13 @@ function App() {
         <Route path="/products/:id" element={<ProductDetailPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
         <Route element={<ProtectedRoute />}>
           <Route path="/account/orders" element={<OrdersPage />} />
           <Route path="/account/orders/:id" element={<OrderDetailPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
         </Route>
 
         <Route element={<AdminRoute />}>
@@ -41,6 +42,7 @@ function App() {
             <Route path="/admin/categories" element={<AdminCategoriesPage />} />
             <Route path="/admin/products" element={<AdminProductsPage />} />
             <Route path="/admin/admins" element={<AdminManagementPage />} />
+            <Route path="/admin/orders" element={<AdminOrdersPage />} />
           </Route>
         </Route>
       </Routes>

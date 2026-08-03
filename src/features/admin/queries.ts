@@ -85,3 +85,51 @@ export const GET_ADMIN_PRODUCTS = gql`
     }
   }
 `;
+export const GET_ALL_ORDERS = gql`
+  query GetAllOrders($page: Int, $limit: Int) {
+    getAllOrders(page: $page, limit: $limit) {
+      data {
+        _id
+        totalAmount
+        paymentStatus
+        deliveryStatus
+        createdAt
+        notes
+        user {
+          _id
+          name
+          email
+        }
+        items {
+          quantity
+          size
+          product {
+            _id
+            name
+          }
+        }
+      }
+      totalCount
+      totalPages
+      currentPage
+      hasNextPage
+    }
+  }
+`;
+
+export const UPDATE_ORDER_STATUS = gql`
+  mutation UpdateOrderStatus($id: ID!, $deliveryStatus: String!) {
+    updateOrderStatus(id: $id, deliveryStatus: $deliveryStatus) {
+      _id
+      deliveryStatus
+    }
+  }
+`;
+
+export const CANCEL_ORDER = gql`
+  mutation CancelOrder($id: ID!, $reason: String) {
+    cancelOrder(id: $id, reason: $reason) {
+      message
+    }
+  }
+`;
