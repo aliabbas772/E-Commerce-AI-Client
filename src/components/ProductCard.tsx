@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { addToCart } from '../store/slices/cartSlice'
 import { useAddToCart } from '@/features/cart/useAddToCart'
+import WishlistButton from './WishlistButton'
+import { withStockStatus } from './withStockStatus'
 
 interface ProductCardProps {
     productId: string
@@ -10,20 +10,32 @@ interface ProductCardProps {
     price: number
     image: string
     sizes: string[]
+    stock?: number
 }
 
-export default function ProductCard({ productId, name, price, image, sizes }: ProductCardProps) {
-    const dispatch = useDispatch()
+function ProductCardBase({
+    productId,
+    name,
+    price,
+    image,
+    sizes,
+    isOutOfStock,
+}: ProductCardProps & { isOutOfStock: boolean }) {
     const safeSizes = sizes ?? []
-    const [selectedSize, setSelectedSize] = useState(safeSizes[0] ?? '');
+    const [selectedSize, setSelectedSize] = useState(safeSizes[0] ?? '')
     const addToCart = useAddToCart()
 
     return (
         <div className="flex flex-col gap-3">
-            <Link to={`/products/${productId}`}>
-                <div className="aspect-[3/4] overflow-hidden rounded-lg bg-gray-100">
+            <Link to={`/products/${productId}`} className="relative block">
+                <div className={`aspect-[3/4] overflow-hidden rounded-lg bg-gray-100 ${isOutOfStock ? 'opacity-60' : ''}`}>
                     <img src={image} alt={name} className="h-full w-full object-cover transition-transform hover:scale-105" />
                 </div>
+                <WishlistButton
+                    productId={productId}
+                    size={16}
+                    className="absolute right-2 top-2 rounded-full bg-white/90 p-1.5 backdrop-blur-sm"
+                />
             </Link>
 
             <div className="flex items-center justify-between">
@@ -38,7 +50,8 @@ export default function ProductCard({ productId, name, price, image, sizes }: Pr
                     <select
                         value={selectedSize}
                         onChange={(e) => setSelectedSize(e.target.value)}
-                        className="rounded-md border border-gray-200 px-2 py-1 text-xs text-gray-700"
+                        disabled={isOutOfStock}
+                        className="rounded-md border border-gray-200 px-2 py-1 text-xs text-gray-700 disabled:opacity-50"
                     >
                         {safeSizes.map((size) => (
                             <option key={size} value={size}>
@@ -50,12 +63,17 @@ export default function ProductCard({ productId, name, price, image, sizes }: Pr
 
                 <button
                     onClick={() => addToCart({ productId, name, price, image, size: selectedSize })}
-                    disabled={!selectedSize}
-                    className="rounded-lg bg-gray-900 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-gray-800 disabled:opacity-40"
+                    disabled={!selectedSize || isOutOfStock}
+                    className={`rounded-lg px-4 py-2 text-xs font-medium text-white transition-colors ${isOutOfStock
+                            ? 'cursor-not-allowed bg-gray-300'
+                            : 'cursor-pointer bg-gray-900 hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-40'
+                        }`}
                 >
-                    Add
+                    {isOutOfStock ? 'Sold out' : 'Add'}
                 </button>
             </div>
         </div>
     )
 }
+
+export default withStockStatus(ProductCardBase)

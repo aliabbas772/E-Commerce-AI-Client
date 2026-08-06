@@ -103,5 +103,17 @@ const errorLink = new ErrorLink(({ error, operation, forward }) => {
 
 export const apolloClient = new ApolloClient({
   link: from([errorLink, authLink, httpLink]),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Wishlist: {
+        fields: {
+          products: {
+            merge(_existing, incoming) {
+              return incoming;
+            },
+          },
+        },
+      },
+    },
+  }),
 });

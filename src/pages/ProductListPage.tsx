@@ -50,6 +50,7 @@ const ProductListPage = () => {
                             price={product.price}
                             image={product.images[0]}
                             sizes={product.sizes}
+                            stock={product.stock}
                         />
                     ))}
                 </div>

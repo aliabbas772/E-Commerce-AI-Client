@@ -1,15 +1,13 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useQuery } from '@apollo/client/react'
-import { useDispatch } from 'react-redux'
 import { GET_PRODUCT_BY_ID } from '../features/products/queries'
-import { addToCart } from '../store/slices/cartSlice'
 import ReviewsSection from '../components/ReviewsSection'
 import { useAddToCart } from '@/features/cart/useAddToCart'
+import WishlistButton from '@/components/WishlistButton'
 
 export default function ProductDetailPage() {
     const { id } = useParams<{ id: string }>()
-    const dispatch = useDispatch()
     const [selectedSize, setSelectedSize] = useState<string | null>(null)
     const [activeImage, setActiveImage] = useState(0)
 
@@ -64,9 +62,12 @@ export default function ProductDetailPage() {
                 </div>
 
                 <div className="flex flex-col gap-6">
-                    <div>
-                        <h1 className="text-2xl font-semibold text-gray-900">{product.name}</h1>
-                        <p className="mt-2 text-lg font-semibold text-gray-900">₹{product.price}</p>
+                    <div className="flex items-start justify-between">
+                        <div>
+                            <h1 className="text-2xl font-semibold text-gray-900">{product.name}</h1>
+                            <p className="mt-2 text-lg font-semibold text-gray-900">₹{product.price}</p>
+                        </div>
+                        <WishlistButton productId={product._id} size={22} />
                     </div>
 
                     <p className="text-sm leading-relaxed text-gray-600">{product.description}</p>

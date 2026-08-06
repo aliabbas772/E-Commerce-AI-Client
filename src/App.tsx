@@ -17,6 +17,8 @@ import AdminCategoriesPage from "./pages/admin/AdminCategoriesPage"
 import AdminProductsPage from "./pages/admin/AdminProductsPage"
 import AdminManagementPage from "./pages/admin/AdminManagementPage"
 import AdminOrdersPage from "./pages/admin/AdminOrdersPage"
+import SearchResultsPage from "./pages/SearchResultsPage"
+import WishlistPage from "./pages/WishlistPage"
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/search" element={<SearchResultsPage />} />
+        <Route path="/account/wishlist" element={<WishlistPage />} />
 
         <Route element={<ProtectedRoute />}>
           <Route path="/account/orders" element={<OrdersPage />} />

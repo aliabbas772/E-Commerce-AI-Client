@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { Search, User as UserIcon, ShoppingBag, ChevronDown, Package, LogOut } from 'lucide-react'
+import { Search, User as UserIcon, ShoppingBag, ChevronDown, Package, LogOut, Heart } from 'lucide-react'
 import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { useMutation, useQuery } from '@apollo/client/react'
@@ -8,12 +8,12 @@ import { logout } from '../store/slices/authSlice'
 import { GET_CATEGORIES } from '../features/categories/queries'
 import { LOGOUT } from '@/features/auth/queries'
 import { useCart } from '@/features/cart/useCart'
+import SearchBar from './SearchBar'
+import NotificationBell from './NotificationBell'
 
 export default function Navbar() {
     const { isAuthenticated, user } = useSelector((state: RootState) => state.auth)
-    const cartCount = useSelector((state: RootState) =>
-        state.cart.items.reduce((sum, item) => sum + item.quantity, 0)
-    )
+
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { itemCount } = useCart()
@@ -77,9 +77,8 @@ export default function Navbar() {
                 </div>
 
                 <div className="flex items-center gap-6">
-                    <button aria-label="Search" className="text-gray-500 transition-colors hover:text-gray-900">
-                        <Search size={19} strokeWidth={1.5} />
-                    </button>
+                    <SearchBar />
+                    <NotificationBell />
 
                     {isAuthenticated ? (
                         <div className="relative" ref={dropdownRef}>
@@ -102,6 +101,14 @@ export default function Navbar() {
                                         <Package size={15} strokeWidth={1.5} />
                                         My Orders
                                     </Link>
+                                    <Link
+                                        to="/account/wishlist"
+                                        onClick={() => setDropdownOpen(false)}
+                                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                                    >
+                                        <Heart size={15} strokeWidth={1.5} />
+                                        My Wishlist
+                                    </Link>
                                     <button
                                         onClick={handleLogout}
                                         className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
@@ -120,9 +127,9 @@ export default function Navbar() {
 
                     <Link to="/cart" aria-label="Cart" className="relative text-gray-500 transition-colors hover:text-gray-900">
                         <ShoppingBag size={19} strokeWidth={1.5} />
-                        {cartCount > 0 && (
+                        {itemCount > 0 && (
                             <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-gray-900 text-[10px] font-medium text-white">
-                                {cartCount}
+                                {itemCount}
                             </span>
                         )}
                     </Link>

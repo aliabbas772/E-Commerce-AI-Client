@@ -52,9 +52,12 @@ export default function AddressForm({ onSuccess, onCancel }: AddressFormProps) {
                     className="rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-gray-900"
                 />
                 <input
+                    type="tel"
+                    inputMode="numeric"
                     placeholder="Phone"
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
+                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                    maxLength={10}
                     className="rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-gray-900"
                 />
             </div>
@@ -80,9 +83,12 @@ export default function AddressForm({ onSuccess, onCancel }: AddressFormProps) {
                     className="rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-gray-900"
                 />
                 <input
+                    type="text"
+                    inputMode="numeric"
                     placeholder="Pincode"
                     value={pincode}
-                    onChange={(e) => setPincode(e.target.value)}
+                    onChange={(e) => setPincode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    maxLength={6}
                     className="rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-gray-900"
                 />
             </div>
