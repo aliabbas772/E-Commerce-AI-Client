@@ -5,11 +5,14 @@ import { GET_PRODUCT_BY_ID } from '../features/products/queries'
 import ReviewsSection from '../components/ReviewsSection'
 import { useAddToCart } from '@/features/cart/useAddToCart'
 import WishlistButton from '@/components/WishlistButton'
+import { Sparkles } from 'lucide-react'
+import SizeRecommendationModal from '../components/SizeRecommendationModal'
 
 export default function ProductDetailPage() {
     const { id } = useParams<{ id: string }>()
     const [selectedSize, setSelectedSize] = useState<string | null>(null)
     const [activeImage, setActiveImage] = useState(0)
+    const [showSizeHelper, setShowSizeHelper] = useState(false)
 
     const addToCart = useAddToCart()
 
@@ -73,7 +76,16 @@ export default function ProductDetailPage() {
                     <p className="text-sm leading-relaxed text-gray-600">{product.description}</p>
 
                     <div className="flex flex-col gap-2">
-                        <span className="text-sm font-medium text-gray-900">Size</span>
+                        <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium text-gray-900">Size</span>
+                            <button
+                                onClick={() => setShowSizeHelper(true)}
+                                className="flex items-center gap-1 text-xs font-medium text-gray-500 hover:text-gray-900"
+                            >
+                                <Sparkles size={13} strokeWidth={1.5} />
+                                Not sure? Get help
+                            </button>
+                        </div>
                         <div className="flex gap-2">
                             {product.sizes.map((size: string) => (
                                 <button
@@ -105,6 +117,13 @@ export default function ProductDetailPage() {
             </div>
 
             <ReviewsSection productId={product._id} />
+
+            {showSizeHelper && (
+                <SizeRecommendationModal
+                    category={product.category?.name ?? ''}
+                    onClose={() => setShowSizeHelper(false)}
+                />
+            )}
         </div>
     )
 }

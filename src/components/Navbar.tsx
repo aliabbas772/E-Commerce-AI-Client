@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { Search, User as UserIcon, ShoppingBag, ChevronDown, Package, LogOut, Heart } from 'lucide-react'
+import { Search, User as UserIcon, ShoppingBag, ChevronDown, Package, LogOut, Heart, Sparkles } from 'lucide-react'
 import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { useMutation, useQuery } from '@apollo/client/react'
@@ -108,6 +108,14 @@ export default function Navbar() {
                                     >
                                         <Heart size={15} strokeWidth={1.5} />
                                         My Wishlist
+                                    </Link>
+                                    <Link
+                                        to="/outfit-advisor"
+                                        onClick={() => setDropdownOpen(false)}
+                                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                                    >
+                                        <Sparkles size={15} strokeWidth={1.5} />
+                                        Outfit Advisor
                                     </Link>
                                     <button
                                         onClick={handleLogout}

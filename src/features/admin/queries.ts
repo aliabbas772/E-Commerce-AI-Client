@@ -133,3 +133,44 @@ export const CANCEL_ORDER = gql`
     }
   }
 `;
+
+export const GET_SALES_ANALYTICS = gql`
+  query GetSalesAnalytics {
+    getSalesAnalytics {
+      totalRevenue
+      totalOrders
+      averageOrderValue
+    }
+  }
+`;
+
+export const GET_TOP_PRODUCTS = gql`
+  query GetTopProducts {
+    getTopProducts {
+      productId
+      name
+      totalSold
+      revenue
+    }
+  }
+`;
+
+export const GET_ALL_USERS = gql`
+  query GetAllUsers($search: String, $page: Int, $limit: Int) {
+    getAllUsers(search: $search, page: $page, limit: $limit) {
+      data {
+        _id
+        name
+        email
+        phone
+        role
+        isVerified
+        createdAt
+      }
+      totalCount
+      totalPages
+      currentPage
+      hasNextPage
+    }
+  }
+`;

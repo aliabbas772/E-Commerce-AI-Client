@@ -12,7 +12,7 @@ import {
     DELETE_NOTIFICATION,
 } from '../features/notifications/queries'
 
-const POLL_INTERVAL = 30000 // 30s
+const POLL_INTERVAL = 120000 // 120s
 
 export default function NotificationBell() {
     const { isAuthenticated } = useSelector((state: RootState) => state.auth)

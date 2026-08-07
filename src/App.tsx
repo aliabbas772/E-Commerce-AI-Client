@@ -19,6 +19,10 @@ import AdminManagementPage from "./pages/admin/AdminManagementPage"
 import AdminOrdersPage from "./pages/admin/AdminOrdersPage"
 import SearchResultsPage from "./pages/SearchResultsPage"
 import WishlistPage from "./pages/WishlistPage"
+import AdminAuditLogsPage from "./pages/admin/AdminAuditLogsPage"
+import AdminAnalyticsPage from "./pages/admin/AdminAnalyticsPage"
+import AdminUsersPage from "./pages/admin/AdminUsersPage"
+import OutfitAdvisorPage from "./pages/OutfitAdvisorPage"
 
 function App() {
   return (
@@ -33,6 +37,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/search" element={<SearchResultsPage />} />
         <Route path="/account/wishlist" element={<WishlistPage />} />
+        <Route path="/outfit-advisor" element={<OutfitAdvisorPage />} />
 
         <Route element={<ProtectedRoute />}>
           <Route path="/account/orders" element={<OrdersPage />} />
@@ -47,6 +52,9 @@ function App() {
             <Route path="/admin/products" element={<AdminProductsPage />} />
             <Route path="/admin/admins" element={<AdminManagementPage />} />
             <Route path="/admin/orders" element={<AdminOrdersPage />} />
+            <Route path="/admin/audit-logs" element={<AdminAuditLogsPage />} />
+            <Route path="/admin/analytics" element={<AdminAnalyticsPage />} />
+            <Route path="/admin/users" element={<AdminUsersPage />} />
           </Route>
         </Route>
       </Routes>

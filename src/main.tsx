@@ -7,13 +7,16 @@ import { store } from './store/store'
 import { ApolloProvider } from '@apollo/client/react'
 import { apolloClient } from './lib/apolloClient'
 import { BrowserRouter } from 'react-router-dom'
+import NotificationSocketProvider from './components/NotificationSocketProvider'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ApolloProvider client={apolloClient}>
       <Provider store={store}>
         <BrowserRouter>
-          <App />
+          <NotificationSocketProvider>
+            <App />
+          </NotificationSocketProvider>
         </BrowserRouter>
       </Provider>
     </ApolloProvider>

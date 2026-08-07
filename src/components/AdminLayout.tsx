@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { LayoutGrid, Package, Shield, ShoppingBag } from 'lucide-react'
+import { BarChart3, LayoutGrid, Package, ScrollText, Shield, ShoppingBag, Users } from 'lucide-react'
 import { ShoppingBag as OrdersIcon } from 'lucide-react'
 
 export default function AdminLayout() {
@@ -33,6 +33,18 @@ export default function AdminLayout() {
                     <NavLink to="/admin/orders" className={linkClass}>
                         <OrdersIcon size={16} strokeWidth={1.5} />
                         Orders
+                    </NavLink>
+                    <NavLink to="/admin/audit-logs" className={linkClass}>
+                        <ScrollText size={16} strokeWidth={1.5} />
+                        Audit Logs
+                    </NavLink>
+                    <NavLink to="/admin/analytics" className={linkClass}>
+                        <BarChart3 size={16} strokeWidth={1.5} />
+                        Analytics
+                    </NavLink>
+                    <NavLink to="/admin/users" className={linkClass}>
+                        <Users size={16} strokeWidth={1.5} />
+                        Users
                     </NavLink>
                 </nav>
             </aside>
