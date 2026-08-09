@@ -10,8 +10,10 @@ export const GET_PRODUCTS = gql`
         comparePrice
         images
         averageRating
-        stock
-        sizes
+        sizes {
+          size
+          stock
+        }
       }
       totalCount
       totalPages
@@ -30,8 +32,10 @@ export const GET_PRODUCT_BY_ID = gql`
       price
       comparePrice
       images
-      sizes
-      stock
+      sizes {
+        size
+        stock
+      }
       averageRating
       totalReviews
       category {

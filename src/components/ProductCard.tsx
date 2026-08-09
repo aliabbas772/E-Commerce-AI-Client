@@ -21,6 +21,7 @@ function ProductCardBase({
     sizes,
     isOutOfStock,
 }: ProductCardProps & { isOutOfStock: boolean }) {
+    const availableSizes = sizes.filter((s: any) => s.stock > 0)
     const safeSizes = sizes ?? []
     const [selectedSize, setSelectedSize] = useState(safeSizes[0] ?? '')
     const addToCart = useAddToCart()
@@ -65,8 +66,8 @@ function ProductCardBase({
                     onClick={() => addToCart({ productId, name, price, image, size: selectedSize })}
                     disabled={!selectedSize || isOutOfStock}
                     className={`rounded-lg px-4 py-2 text-xs font-medium text-white transition-colors ${isOutOfStock
-                            ? 'cursor-not-allowed bg-gray-300'
-                            : 'cursor-pointer bg-gray-900 hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-40'
+                        ? 'cursor-not-allowed bg-gray-300'
+                        : 'cursor-pointer bg-gray-900 hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-40'
                         }`}
                 >
                     {isOutOfStock ? 'Sold out' : 'Add'}

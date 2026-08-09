@@ -28,7 +28,10 @@ export const CREATE_PRODUCT = gql`
         _id
         name
       }
-      stock
+      sizes {
+        size
+        stock
+      }
     }
   }
 `;
@@ -40,7 +43,10 @@ export const UPDATE_PRODUCT = gql`
       name
       price
       images
-      stock
+      sizes {
+        size
+        stock
+      }
       isActive
     }
   }
@@ -70,7 +76,10 @@ export const GET_ADMIN_PRODUCTS = gql`
         _id
         name
         price
-        stock
+        sizes {
+          size
+          stock
+        }
         isActive
         images
         category {

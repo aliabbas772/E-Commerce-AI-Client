@@ -20,7 +20,7 @@ export default function AddressForm({ onSuccess, onCancel }: AddressFormProps) {
 
     const [createAddress, { loading }] = useMutation(CREATE_ADDRESS, {
         refetchQueries: [{ query: GET_MY_ADDRESSES }],
-        onCompleted: (data) => {
+        onCompleted: (data: any) => {
             onSuccess(data.createAddress._id)
         },
         onError: (err) => setFormError(err.message),

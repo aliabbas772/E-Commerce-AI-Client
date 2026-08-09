@@ -1,7 +1,12 @@
 {
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": { "@/*": ["src/*"] },
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "noEmit": true,
+    "isolatedModules": true,
+    "outDir": "./dist",
+    "types": ["vite/client"]
   }
 }

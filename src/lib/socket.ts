@@ -37,7 +37,7 @@ class NotificationSocket {
     this.ws.onclose = () => {
       if (this.pingInterval) clearInterval(this.pingInterval);
       if (!this.intentionallyClosed) {
-        this.scheduleReconnect(token);
+        this.scheduleReconnect();
       }
     };
 
@@ -46,10 +46,15 @@ class NotificationSocket {
     };
   }
 
-  private scheduleReconnect(token: string) {
+  private scheduleReconnect() {
     const delay = Math.min(1000 * 2 ** this.reconnectAttempts, 30000);
     this.reconnectAttempts += 1;
-    this.reconnectTimer = setTimeout(() => this.connect(token), delay);
+    this.reconnectTimer = setTimeout(() => {
+      const freshToken = localStorage.getItem("token");
+      if (freshToken) {
+        this.connect(freshToken);
+      }
+    }, delay);
   }
 
   disconnect() {

@@ -33,3 +33,11 @@ export const GET_SIZE_RECOMMENDATION = gql`
     }
   }
 `;
+
+export const ASK_SUPPORT_CHAT = gql`
+  query AskSupportChat($query: String!) {
+    askSupportChat(query: $query) {
+      reply
+    }
+  }
+`;

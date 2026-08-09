@@ -23,11 +23,13 @@ import AdminAuditLogsPage from "./pages/admin/AdminAuditLogsPage"
 import AdminAnalyticsPage from "./pages/admin/AdminAnalyticsPage"
 import AdminUsersPage from "./pages/admin/AdminUsersPage"
 import OutfitAdvisorPage from "./pages/OutfitAdvisorPage"
+import SupportChatWidget from "./components/SupportChatWidget"
 
 function App() {
   return (
     <div>
       <Navbar />
+      <SupportChatWidget />
       <Routes>
         <Route path="/" element={<ProductListPage />} />
         <Route path="/products/:id" element={<ProductDetailPage />} />

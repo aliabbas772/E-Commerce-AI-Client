@@ -18,6 +18,9 @@ export function useAddToCart() {
 
   const [addToCartMutation] = useMutation(ADD_TO_CART, {
     refetchQueries: [{ query: GET_MY_CART }],
+    onError: (err) => {
+      alert(err.message); // or wire to a toast system if you have one
+    },
   });
 
   return (item: AddToCartItem) => {

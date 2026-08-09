@@ -20,7 +20,9 @@ export default function Navbar() {
 
     const [logoutMutation] = useMutation(LOGOUT)
     const { data } = useQuery(GET_CATEGORIES)
-    const categories = data?.getCategories ?? []
+    const contextData = data as { getCategories?: () => any[] };
+    const categories = contextData?.getCategories?.() ?? [];
+
 
     const [searchParams] = useSearchParams()
     const activeCategory = searchParams.get('category')
@@ -68,7 +70,7 @@ export default function Navbar() {
                     {categories.map((cat: any) => (
                         <Link
                             key={cat._id}
-                            to={`/products?category=${cat._id}`}
+                            to={`/?category=${cat._id}`}
                             className={`transition-colors hover:text-gray-900 ${activeCategory === cat._id ? 'text-gray-900' : ''}`}
                         >
                             {cat.name}

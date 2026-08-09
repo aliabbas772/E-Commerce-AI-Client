@@ -34,7 +34,7 @@ export default function ProductForm({ editingProduct, onDone }: ProductFormProps
     const [price, setPrice] = useState(editingProduct?.price?.toString() ?? '')
     const [comparePrice, setComparePrice] = useState(editingProduct?.comparePrice?.toString() ?? '')
     const [categoryId, setCategoryId] = useState(editingProduct?.category?._id ?? '')
-    const [sizes, setSizes] = useState<string[]>(editingProduct?.sizes ?? [])
+    // const [sizes, setSizes] = useState<string[]>(editingProduct?.sizes ?? [])
     const [stock, setStock] = useState(editingProduct?.stock?.toString() ?? '')
     const [sku, setSku] = useState(editingProduct?.sku ?? '')
     const [imageFiles, setImageFiles] = useState<File[]>([])
@@ -49,8 +49,17 @@ export default function ProductForm({ editingProduct, onDone }: ProductFormProps
     })
     const [uploadImage] = useMutation(UPLOAD_PRODUCT_IMAGE)
 
+    const [sizeStocks, setSizeStocks] = useState<Record<string, number>>(
+        Object.fromEntries((editingProduct?.sizes ?? []).map((s: any) => [s.size, s.stock]))
+    )
+
     const toggleSize = (size: string) => {
-        setSizes((prev) => (prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]))
+        setSizeStocks((prev) => {
+            const next = { ...prev }
+            if (size in next) delete next[size]
+            else next[size] = 0
+            return next
+        })
     }
 
     const fileToBase64 = (file: File): Promise<string> => {
@@ -71,7 +80,7 @@ export default function ProductForm({ editingProduct, onDone }: ProductFormProps
         e.preventDefault()
         setFormError('')
 
-        if (!name || !description || !price || !categoryId || sizes.length === 0 || !stock) {
+        if (!name || !description || !price || !categoryId || sizeStocks.length === 0 || !stock) {
             setFormError('Please fill in all required fields and select at least one size.')
             return
         }
@@ -82,8 +91,8 @@ export default function ProductForm({ editingProduct, onDone }: ProductFormProps
             price: parseFloat(price),
             comparePrice: comparePrice ? parseFloat(comparePrice) : undefined,
             category: categoryId,
-            sizes,
-            stock: parseInt(stock, 10),
+            sizes: sizeStocks,
+            // stock: parseInt(stock, 10),
             sku: sku || undefined,
         }
 
@@ -184,13 +193,14 @@ export default function ProductForm({ editingProduct, onDone }: ProductFormProps
                             key={size}
                             type="button"
                             onClick={() => toggleSize(size)}
-                            className={`h-10 w-10 rounded-lg border text-xs font-semibold transition-colors ${sizes.includes(size)
+                            className={`h-10 w-10 rounded-lg border text-xs font-semibold transition-colors ${size in sizeStocks // 👈 FIXED: Matches your toggleSize dictionary logic
                                 ? 'border-gray-900 bg-gray-900 text-white'
                                 : 'border-gray-200 text-gray-500 hover:border-gray-400'
                                 }`}
                         >
                             {size}
                         </button>
+
                     ))}
                 </div>
             </div>

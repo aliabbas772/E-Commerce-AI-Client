@@ -10,6 +10,7 @@ import { GET_MY_ADDRESSES } from '../features/addresses/queries'
 import { loadRazorpayScript } from '../lib/loadRazorpay'
 import AddressForm from '../components/AddressForm'
 import { useCart } from '@/features/cart/useCart'
+import { GET_MY_CART } from '@/features/cart/queries'
 
 declare global {
     interface Window {
@@ -88,9 +89,9 @@ export default function CheckoutPage() {
                             razorpayPaymentId: response.razorpay_payment_id,
                             razorpaySignature: response.razorpay_signature,
                         },
+                        refetchQueries: [{ query: GET_MY_CART }],
                     })
                     if (result.data.verifyPayment.message) {
-                        dispatch(clearCart())
                         navigate('/')
                     }
                 },
