@@ -9,7 +9,7 @@ const ProductListPage = () => {
     const [searchParams] = useSearchParams();
     const categoryId = searchParams.get('category');
 
-    const { data, loading, error } = useQuery(GET_PRODUCTS, {
+    const { data, loading, error } = useQuery<any>(GET_PRODUCTS, {
         variables: {
             page: 1,
             limit: 12,
@@ -17,7 +17,7 @@ const ProductListPage = () => {
         }
     });
 
-    const { data: categoryData } = useQuery(GET_CATEGORIES);
+    const { data: categoryData } = useQuery<any>(GET_CATEGORIES);
     const activeCategoryName = categoryData?.getCategories?.find(
         (cat: any) => cat._id === categoryId
     )?.name;

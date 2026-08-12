@@ -23,7 +23,7 @@ const deliveryBadge: Record<string, string> = {
 }
 
 export default function AdminOrdersPage() {
-    const { data, loading, refetch } = useQuery(GET_ALL_ORDERS, {
+    const { data, loading, refetch } = useQuery<any>(GET_ALL_ORDERS, {
         variables: { page: 1, limit: 50 },
     })
 

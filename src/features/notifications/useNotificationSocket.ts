@@ -22,7 +22,7 @@ export function useNotificationSocket() {
     const unsubscribe = notificationSocket.subscribe((event, data) => {
       if (event !== "new_notification") return;
 
-      apolloClient.cache.updateQuery(
+      apolloClient.cache.updateQuery<any>(
         { query: GET_UNREAD_COUNT },
         (existing) => {
           if (!existing) return existing;
@@ -35,7 +35,7 @@ export function useNotificationSocket() {
         },
       );
 
-      apolloClient.cache.updateQuery(
+      apolloClient.cache.updateQuery<any>(
         { query: GET_MY_NOTIFICATIONS, variables: { page: 1, limit: 15 } },
         (existing) => {
           if (!existing) return existing;

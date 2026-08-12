@@ -16,7 +16,7 @@ const statusColors: Record<string, string> = {
 
 const OrderDetailPage = () => {
     const { id } = useParams()
-    const { data, loading, error } = useQuery(GET_ORDER_BY_ID, {
+    const { data, loading, error } = useQuery<any>(GET_ORDER_BY_ID, {
         variables: { id },
         skip: !id,
     })

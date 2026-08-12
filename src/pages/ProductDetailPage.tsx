@@ -16,7 +16,7 @@ export default function ProductDetailPage() {
 
     const addToCart = useAddToCart()
 
-    const { data, loading, error } = useQuery(GET_PRODUCT_BY_ID, {
+    const { data, loading, error } = useQuery<any>(GET_PRODUCT_BY_ID, {
         variables: { id },
     })
 

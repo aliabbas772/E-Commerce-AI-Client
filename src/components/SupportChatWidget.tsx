@@ -15,35 +15,33 @@ export default function SupportChatWidget() {
     const [isOpen, setIsOpen] = useState(false)
     const [input, setInput] = useState('')
     const [messages, setMessages] = useState<ChatMessage[]>([])
+    const [askSupportChat, { loading }] = useLazyQuery<any>(ASK_SUPPORT_CHAT)
     const bottomRef = useRef<HTMLDivElement>(null)
 
-    const [askSupportChat, { loading }] = useLazyQuery(ASK_SUPPORT_CHAT, {
-        onCompleted: (data) => {
-            setMessages((prev) => [...prev, { role: 'assistant', text: data.askSupportChat.reply }])
-        },
-        onError: (err) => {
-            const friendly = err.message.includes('RATE_LIMITED') || err.message.includes('Too many')
-                ? "You've reached the limit for support messages right now — try again shortly."
-                : "Sorry, something went wrong. Please try again."
-            setMessages((prev) => [...prev, { role: 'assistant', text: friendly }])
-        },
-    })
-
-    useEffect(() => {
-        bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-    }, [messages])
-
-    if (!isAuthenticated) return null
-
-    const handleSend = (e: React.FormEvent) => {
+    const handleSend = async (e: React.FormEvent) => {
         e.preventDefault()
         if (!input.trim() || loading) return
 
         const query = input.trim()
         setMessages((prev) => [...prev, { role: 'user', text: query }])
         setInput('')
-        askSupportChat({ variables: { query } })
+
+        try {
+            const result = await askSupportChat({ variables: { query } })
+            setMessages((prev) => [...prev, { role: 'assistant', text: result.data?.askSupportChat?.reply ?? "Sorry, I couldn't generate a response." }])
+        } catch (err: any) {
+            const friendly = err.message?.includes('RATE_LIMITED') || err.message?.includes('Too many')
+                ? "You've reached the limit for support messages right now — try again shortly."
+                : "Sorry, something went wrong. Please try again."
+            setMessages((prev) => [...prev, { role: 'assistant', text: friendly }])
+        }
     }
+
+    useEffect(() => {
+        bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }, [messages])
+
+    if (!isAuthenticated) return null
 
     return (
         <div className="fixed bottom-6 right-6 z-50">

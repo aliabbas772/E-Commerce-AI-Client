@@ -9,7 +9,7 @@ export default function AdminUsersPage() {
     const debouncedSearch = useDebounce(search, 350)
     const [copiedId, setCopiedId] = useState<string | null>(null)
 
-    const { data, loading } = useQuery(GET_ALL_USERS, {
+    const { data, loading } = useQuery<any>(GET_ALL_USERS, {
         variables: { search: debouncedSearch || undefined, page: 1, limit: 50 },
     })
 

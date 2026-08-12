@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile  
     container_name: ecommerce_client
     ports: 
-      - 4000:80
+      - 5173:80
     env_file: 
       - .env
     volumes: 
@@ -17,4 +17,4 @@ services:
 
 networks:
   ecommerce_network:
-    driver: bridge
+    external: true

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { GET_MY_ORDERS } from '@/features/orders/queries'
 
 const OrdersPage = () => {
-    const { data, loading, error } = useQuery(GET_MY_ORDERS, {
+    const { data, loading, error } = useQuery<any>(GET_MY_ORDERS, {
         variables: { page: 1, limit: 10 }
     })
 

@@ -18,12 +18,12 @@ const actionColor: Record<string, string> = {
 }
 
 export default function AdminAuditLogsPage() {
-    const { data: adminsData, loading: adminsLoading } = useQuery(GET_ALL_ADMINS)
+    const { data: adminsData, loading: adminsLoading } = useQuery<any>(GET_ALL_ADMINS)
     const [selectedAdminId, setSelectedAdminId] = useState('')
 
     const admins = adminsData?.getAllAdmins ?? []
 
-    const { data: logsData, loading: logsLoading } = useQuery(GET_AUDIT_LOGS, {
+    const { data: logsData, loading: logsLoading } = useQuery<any>(GET_AUDIT_LOGS, {
         variables: { adminId: selectedAdminId, page: 1, limit: 100 },
         skip: !selectedAdminId,
     })

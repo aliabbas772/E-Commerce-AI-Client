@@ -25,15 +25,15 @@ export default function CheckoutPage() {
     const navigate = useNavigate()
     const { items, subtotal } = useCart()
 
-    const { data: addressData, loading: addressLoading } = useQuery(GET_MY_ADDRESSES)
+    const { data: addressData, loading: addressLoading } = useQuery<any>(GET_MY_ADDRESSES)
 
     const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null)
     const [showAddForm, setShowAddForm] = useState(false)
     const [processing, setProcessing] = useState(false)
     const [errorMsg, setErrorMsg] = useState('')
 
-    const [createOrder] = useMutation(CREATE_ORDER)
-    const [verifyPayment] = useMutation(VERIFY_PAYMENT)
+    const [createOrder] = useMutation<any>(CREATE_ORDER)
+    const [verifyPayment] = useMutation<any>(VERIFY_PAYMENT)
 
     const addresses = addressData?.getMyAddresses ?? []
 

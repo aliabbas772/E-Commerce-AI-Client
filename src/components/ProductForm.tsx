@@ -26,7 +26,7 @@ const inputClass =
 export default function ProductForm({ editingProduct, onDone }: ProductFormProps) {
     const isEditMode = !!editingProduct
 
-    const { data: categoryData } = useQuery(GET_CATEGORIES)
+    const { data: categoryData } = useQuery<any>(GET_CATEGORIES)
     const categories = categoryData?.getCategories ?? []
 
     const [name, setName] = useState(editingProduct?.name ?? '')
@@ -34,17 +34,16 @@ export default function ProductForm({ editingProduct, onDone }: ProductFormProps
     const [price, setPrice] = useState(editingProduct?.price?.toString() ?? '')
     const [comparePrice, setComparePrice] = useState(editingProduct?.comparePrice?.toString() ?? '')
     const [categoryId, setCategoryId] = useState(editingProduct?.category?._id ?? '')
-    // const [sizes, setSizes] = useState<string[]>(editingProduct?.sizes ?? [])
     const [stock, setStock] = useState(editingProduct?.stock?.toString() ?? '')
     const [sku, setSku] = useState(editingProduct?.sku ?? '')
     const [imageFiles, setImageFiles] = useState<File[]>([])
     const [uploading, setUploading] = useState(false)
     const [formError, setFormError] = useState('')
 
-    const [createProduct, { loading: createLoading }] = useMutation(CREATE_PRODUCT, {
+    const [createProduct, { loading: createLoading }] = useMutation<any>(CREATE_PRODUCT, {
         refetchQueries: [{ query: GET_ADMIN_PRODUCTS, variables: { page: 1, limit: 50 } }],
     })
-    const [updateProduct, { loading: updateLoading }] = useMutation(UPDATE_PRODUCT, {
+    const [updateProduct, { loading: updateLoading }] = useMutation<any>(UPDATE_PRODUCT, {
         refetchQueries: [{ query: GET_ADMIN_PRODUCTS, variables: { page: 1, limit: 50 } }],
     })
     const [uploadImage] = useMutation(UPLOAD_PRODUCT_IMAGE)

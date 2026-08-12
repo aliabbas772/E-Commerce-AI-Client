@@ -18,7 +18,7 @@ interface ReviewsSectionProps {
 export default function ReviewsSection({ productId }: ReviewsSectionProps) {
     const { isAuthenticated, user } = useSelector((state: RootState) => state.auth)
 
-    const { data, loading, error, refetch } = useQuery(GET_PRODUCT_REVIEWS, {
+    const { data, loading, error, refetch } = useQuery<any>(GET_PRODUCT_REVIEWS, {
         variables: { productId, page: 1, limit: 20 },
     })
 

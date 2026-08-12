@@ -5,7 +5,7 @@ import { GET_ADMIN_PRODUCTS, DELETE_PRODUCT } from '../../features/admin/queries
 import ProductForm from '../../components/ProductForm'
 
 export default function AdminProductsPage() {
-    const { data, loading, refetch } = useQuery(GET_ADMIN_PRODUCTS, {
+    const { data, loading, refetch } = useQuery<any>(GET_ADMIN_PRODUCTS, {
         variables: { page: 1, limit: 50 },
     })
 

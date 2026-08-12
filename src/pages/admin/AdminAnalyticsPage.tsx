@@ -15,8 +15,8 @@ function StatCard({ label, value, icon: Icon }: { label: string; value: string; 
 }
 
 export default function AdminAnalyticsPage() {
-    const { data: salesData, loading: salesLoading } = useQuery(GET_SALES_ANALYTICS)
-    const { data: productsData, loading: productsLoading } = useQuery(GET_TOP_PRODUCTS)
+    const { data: salesData, loading: salesLoading } = useQuery<any>(GET_SALES_ANALYTICS)
+    const { data: productsData, loading: productsLoading } = useQuery<any>(GET_TOP_PRODUCTS)
 
     const analytics = salesData?.getSalesAnalytics
     const topProducts = productsData?.getTopProducts ?? []

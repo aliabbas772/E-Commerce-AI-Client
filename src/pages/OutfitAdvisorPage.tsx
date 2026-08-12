@@ -9,7 +9,7 @@ export default function OutfitAdvisorPage() {
     const [gender, setGender] = useState('unisex')
     const [formError, setFormError] = useState('')
 
-    const [fetchRecommendation, { data, loading, error }] = useLazyQuery(GET_OUTFIT_RECOMMENDATION)
+    const [fetchRecommendation, { data, loading, error }] = useLazyQuery<any>(GET_OUTFIT_RECOMMENDATION)
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()

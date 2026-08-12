@@ -20,12 +20,12 @@ export default function NotificationBell() {
     const containerRef = useRef<HTMLDivElement>(null)
     const navigate = useNavigate()
 
-    const { data: countData } = useQuery(GET_UNREAD_COUNT, {
+    const { data: countData } = useQuery<any>(GET_UNREAD_COUNT, {
         skip: !isAuthenticated,
         pollInterval: POLL_INTERVAL,
     })
 
-    const { data: listData, refetch } = useQuery(GET_MY_NOTIFICATIONS, {
+    const { data: listData, refetch } = useQuery<any>(GET_MY_NOTIFICATIONS, {
         variables: { page: 1, limit: 15 },
         skip: !isAuthenticated || !isOpen,
     })

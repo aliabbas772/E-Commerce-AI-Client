@@ -32,7 +32,7 @@ export default function RegisterPage() {
 
     const guestCartItems = useSelector((state: RootState) => state.guestCart.items)
 
-    const [sendRegisterOTP, { loading: sendLoading }] = useMutation(SEND_REGISTER_OTP, {
+    const [sendRegisterOTP, { loading: sendLoading }] = useMutation<any>(SEND_REGISTER_OTP, {
         onCompleted: () => {
             setStep('otp')
         },
@@ -41,7 +41,7 @@ export default function RegisterPage() {
         },
     })
 
-    const [verifyRegisterOTP, { loading: verifyLoading }] = useMutation(VERIFY_REGISTER_OTP, {
+    const [verifyRegisterOTP, { loading: verifyLoading }] = useMutation<any>(VERIFY_REGISTER_OTP, {
         onCompleted: (data) => {
             dispatch(
                 login({
@@ -57,7 +57,7 @@ export default function RegisterPage() {
         },
     })
 
-    const [googleAuth] = useMutation(GOOGLE_AUTH, {
+    const [googleAuth] = useMutation<any>(GOOGLE_AUTH, {
         onCompleted: (data) => {
             dispatch(
                 login({

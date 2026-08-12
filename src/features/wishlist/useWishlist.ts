@@ -10,7 +10,7 @@ import {
 export function useWishlist() {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
-  const { data, loading } = useQuery(GET_MY_WISHLIST, {
+  const { data, loading } = useQuery<any>(GET_MY_WISHLIST, {
     skip: !isAuthenticated,
   });
 

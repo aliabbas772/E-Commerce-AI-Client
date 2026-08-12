@@ -23,7 +23,7 @@ export function useCart() {
   const guestItems = useSelector((state: RootState) => state.guestCart.items);
   const dispatch = useDispatch();
 
-  const { data, loading, refetch } = useQuery(GET_MY_CART, {
+  const { data, loading, refetch } = useQuery<any>(GET_MY_CART, {
     skip: !isAuthenticated,
   });
 

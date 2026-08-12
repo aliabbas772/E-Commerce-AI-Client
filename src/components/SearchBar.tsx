@@ -13,7 +13,7 @@ export default function SearchBar() {
     const containerRef = useRef<HTMLDivElement>(null)
     const inputRef = useRef<HTMLInputElement>(null)
 
-    const [fetchSuggestions, { data }] = useLazyQuery(GET_SEARCH_SUGGESTIONS)
+    const [fetchSuggestions, { data }] = useLazyQuery<any>(GET_SEARCH_SUGGESTIONS)
 
     useEffect(() => {
         if (debouncedQuery.trim().length >= 2) {

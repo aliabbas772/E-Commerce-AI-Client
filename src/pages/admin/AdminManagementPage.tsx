@@ -20,7 +20,7 @@ const ALL_PERMISSIONS = [
 ]
 
 export default function AdminManagementPage() {
-    const { data, loading, refetch } = useQuery(GET_ALL_ADMINS)
+    const { data, loading, refetch } = useQuery<any>(GET_ALL_ADMINS)
 
     const [userId, setUserId] = useState('')
     const [newPermissions, setNewPermissions] = useState<string[]>([

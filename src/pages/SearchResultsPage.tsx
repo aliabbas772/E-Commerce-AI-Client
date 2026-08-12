@@ -8,7 +8,7 @@ export default function SearchResultsPage() {
     const [searchParams] = useSearchParams()
     const query = searchParams.get('q') ?? ''
 
-    const { data, loading, error } = useQuery(SEARCH_PRODUCTS, {
+    const { data, loading, error } = useQuery<any>(SEARCH_PRODUCTS, {
         variables: { query, page: 1, limit: 24 },
         skip: !query,
     })

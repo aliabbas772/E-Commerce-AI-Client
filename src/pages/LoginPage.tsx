@@ -29,7 +29,7 @@ export default function LoginPage() {
 
     const guestCartItems = useSelector((state: RootState) => state.guestCart.items)
 
-    const [loginWithPassword, { loading: passwordLoading }] = useMutation(LOGIN_WITH_PASSWORD, {
+    const [loginWithPassword, { loading: passwordLoading }] = useMutation<any>(LOGIN_WITH_PASSWORD, {
         onCompleted: (data) => {
             dispatch(
                 login({
@@ -45,7 +45,7 @@ export default function LoginPage() {
         },
     })
 
-    const [googleAuth] = useMutation(GOOGLE_AUTH, {
+    const [googleAuth] = useMutation<any>(GOOGLE_AUTH, {
         onCompleted: (data) => {
             dispatch(
                 login({
@@ -66,7 +66,7 @@ export default function LoginPage() {
         googleAuth({ variables: { googleToken: credential } })
     }, [googleAuth])
 
-    const [loginWithOTP, { loading: otpSendLoading }] = useMutation(LOGIN_WITH_OTP, {
+    const [loginWithOTP, { loading: otpSendLoading }] = useMutation<any>(LOGIN_WITH_OTP, {
         onCompleted: () => {
             setMode('otp-verify')
         },
@@ -75,7 +75,7 @@ export default function LoginPage() {
         },
     })
 
-    const [verifyLoginOTP, { loading: otpVerifyLoading }] = useMutation(VERIFY_LOGIN_OTP, {
+    const [verifyLoginOTP, { loading: otpVerifyLoading }] = useMutation<any>(VERIFY_LOGIN_OTP, {
         onCompleted: (data) => {
             dispatch(
                 login({

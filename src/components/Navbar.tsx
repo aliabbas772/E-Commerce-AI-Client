@@ -21,8 +21,10 @@ export default function Navbar() {
     const [logoutMutation] = useMutation(LOGOUT)
     const { data } = useQuery(GET_CATEGORIES)
     const contextData = data as { getCategories?: () => any[] };
-    const categories = contextData?.getCategories?.() ?? [];
-
+    // const categories = contextData?.getCategories?.() ?? [];
+    const categories = typeof contextData?.getCategories === 'function'
+        ? contextData.getCategories()
+        : [];
 
     const [searchParams] = useSearchParams()
     const activeCategory = searchParams.get('category')

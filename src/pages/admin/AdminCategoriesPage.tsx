@@ -5,13 +5,13 @@ import { GET_CATEGORIES } from '../../features/categories/queries'
 import { CREATE_CATEGORY, DELETE_CATEGORY } from '../../features/admin/queries'
 
 export default function AdminCategoriesPage() {
-    const { data, loading, refetch } = useQuery(GET_CATEGORIES)
+    const { data, loading, refetch } = useQuery<any>(GET_CATEGORIES)
 
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [formError, setFormError] = useState('')
 
-    const [createCategory, { loading: createLoading }] = useMutation(CREATE_CATEGORY, {
+    const [createCategory, { loading: createLoading }] = useMutation<any>(CREATE_CATEGORY, {
         onCompleted: () => {
             setName('')
             setDescription('')
@@ -20,7 +20,7 @@ export default function AdminCategoriesPage() {
         onError: (err) => setFormError(err.message),
     })
 
-    const [deleteCategory] = useMutation(DELETE_CATEGORY, {
+    const [deleteCategory] = useMutation<any>(DELETE_CATEGORY, {
         onCompleted: () => refetch(),
     })
 
