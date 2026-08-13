@@ -34,7 +34,6 @@ export default function ProductForm({ editingProduct, onDone }: ProductFormProps
     const [price, setPrice] = useState(editingProduct?.price?.toString() ?? '')
     const [comparePrice, setComparePrice] = useState(editingProduct?.comparePrice?.toString() ?? '')
     const [categoryId, setCategoryId] = useState(editingProduct?.category?._id ?? '')
-    const [stock, setStock] = useState(editingProduct?.stock?.toString() ?? '')
     const [sku, setSku] = useState(editingProduct?.sku ?? '')
     const [imageFiles, setImageFiles] = useState<File[]>([])
     const [uploading, setUploading] = useState(false)
@@ -79,19 +78,30 @@ export default function ProductForm({ editingProduct, onDone }: ProductFormProps
         e.preventDefault()
         setFormError('')
 
-        if (!name || !description || !price || !categoryId || sizeStocks.length === 0 || !stock) {
+        const formattedSizes = Object.entries(sizeStocks).map(([size, stockValue]) => ({
+            size: size.trim().toUpperCase(),
+            stock: parseInt(stockValue as any, 10) || 0
+        }))
+
+        console.log(formattedSizes);
+
+        if (!name || !description || !price || !categoryId || formattedSizes.length === 0) {
             setFormError('Please fill in all required fields and select at least one size.')
             return
         }
 
+        // 2. Calculate total aggregate stock to satisfy the required root "stock" field
+        const totalStockCount = formattedSizes.reduce((sum, s) => sum + s.stock, 0)
+
+        // 3. Construct payload matching your backend validator expectations
         const input = {
             name,
             description,
             price: parseFloat(price),
             comparePrice: comparePrice ? parseFloat(comparePrice) : undefined,
             category: categoryId,
-            sizes: sizeStocks,
-            // stock: parseInt(stock, 10),
+            sizes: formattedSizes,
+            // stock: totalStockCount, // <-- Fixed: Satisfies the 'expected number, received undefined' rule
             sku: sku || undefined,
         }
 
@@ -168,15 +178,12 @@ export default function ProductForm({ editingProduct, onDone }: ProductFormProps
 
             <div className="border-t border-gray-100 pt-6">
                 <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-gray-400">Pricing & Inventory</h3>
-                <div className="grid grid-cols-4 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                     <Field label="Price (₹)">
                         <input type="number" placeholder="999" value={price} onChange={(e) => setPrice(e.target.value)} className={inputClass} />
                     </Field>
                     <Field label="Compare price (₹)">
                         <input type="number" placeholder="1299" value={comparePrice} onChange={(e) => setComparePrice(e.target.value)} className={inputClass} />
-                    </Field>
-                    <Field label="Stock">
-                        <input type="number" placeholder="50" value={stock} onChange={(e) => setStock(e.target.value)} className={inputClass} />
                     </Field>
                     <Field label="SKU (optional)">
                         <input placeholder="SHIRT-001" value={sku} onChange={(e) => setSku(e.target.value)} className={inputClass} />
@@ -185,23 +192,46 @@ export default function ProductForm({ editingProduct, onDone }: ProductFormProps
             </div>
 
             <div className="border-t border-gray-100 pt-6">
-                <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-gray-400">Sizes</h3>
-                <div className="flex gap-2">
+                <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-gray-400">Sizes & Stock</h3>
+                <div className="mb-3 flex gap-2">
                     {AVAILABLE_SIZES.map((size) => (
                         <button
                             key={size}
                             type="button"
                             onClick={() => toggleSize(size)}
-                            className={`h-10 w-10 rounded-lg border text-xs font-semibold transition-colors ${size in sizeStocks // 👈 FIXED: Matches your toggleSize dictionary logic
+                            className={`h-10 w-10 rounded-lg border text-xs font-semibold transition-colors ${size in sizeStocks
                                 ? 'border-gray-900 bg-gray-900 text-white'
                                 : 'border-gray-200 text-gray-500 hover:border-gray-400'
                                 }`}
                         >
                             {size}
                         </button>
-
                     ))}
                 </div>
+
+                {Object.keys(sizeStocks).length > 0 && (
+                    <div className="flex flex-col gap-2">
+                        {Object.entries(sizeStocks).map(([size, stockValue]) => (
+                            <div key={size} className="flex items-center gap-3">
+                                <span className="w-10 text-sm font-medium text-gray-700">{size}</span>
+                                <input
+                                    type="number"
+                                    min={0}
+                                    placeholder="Stock quantity"
+                                    value={stockValue === 0 ? '' : stockValue}
+                                    onChange={(e) =>
+                                        setSizeStocks((prev) => ({
+                                            ...prev,
+                                            [size]: parseInt(e.target.value, 10) || 0,
+                                        }))
+                                    }
+                                    className={`w-32 ${inputClass}`}
+                                />
+                                <span className="text-xs text-gray-400">units</span>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
 
             <div className="border-t border-gray-100 pt-6">
