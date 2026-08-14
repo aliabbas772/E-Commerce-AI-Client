@@ -87,16 +87,20 @@ export default function ProductDetailPage() {
                             </button>
                         </div>
                         <div className="flex gap-2">
-                            {product.sizes.map((size: string) => (
+                            {product.sizes.map((item: any) => (
                                 <button
-                                    key={size}
-                                    onClick={() => setSelectedSize(size)}
-                                    className={`h-10 w-10 rounded-md border text-sm font-medium ${selectedSize === size
-                                        ? 'border-gray-900 bg-gray-900 text-white'
-                                        : 'border-gray-300 text-gray-700 hover:border-gray-900'
+                                    key={item.size}
+                                    disabled={item.stock === 0}
+                                    onClick={() => setSelectedSize(item.size)}
+                                    className={`h-10 w-10 rounded-md border text-sm font-medium ${selectedSize === item.size
+                                            ? 'border-gray-900 bg-gray-900 text-white'
+                                            : 'border-gray-300 text-gray-700 hover:border-gray-900'
+                                        } ${item.stock === 0
+                                            ? 'cursor-not-allowed opacity-40'
+                                            : 'hover:border-gray-900'
                                         }`}
                                 >
-                                    {size}
+                                    {item.size}
                                 </button>
                             ))}
                         </div>

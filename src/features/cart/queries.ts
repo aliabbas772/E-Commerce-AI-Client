@@ -8,7 +8,6 @@ const CART_FIELDS = `
       _id
       name
       images
-      stock
     }
     quantity
     size

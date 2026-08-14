@@ -4,12 +4,17 @@ import { useAddToCart } from '@/features/cart/useAddToCart'
 import WishlistButton from './WishlistButton'
 import { withStockStatus } from './withStockStatus'
 
+interface ProductSize {
+    size: string
+    stock: number
+}
+
 interface ProductCardProps {
     productId: string
     name: string
     price: number
     image: string
-    sizes: string[]
+    sizes: ProductSize[]
     stock?: number
 }
 
@@ -21,9 +26,13 @@ function ProductCardBase({
     sizes,
     isOutOfStock,
 }: ProductCardProps & { isOutOfStock: boolean }) {
-    const availableSizes = sizes.filter((s: any) => s.stock > 0)
     const safeSizes = sizes ?? []
-    const [selectedSize, setSelectedSize] = useState(safeSizes[0] ?? '')
+
+    const availableSizes = safeSizes.filter((item) => item.stock > 0)
+
+    const [selectedSize, setSelectedSize] = useState(
+        availableSizes[0]?.size ?? ''
+    )
     const addToCart = useAddToCart()
 
     return (
@@ -52,11 +61,16 @@ function ProductCardBase({
                         value={selectedSize}
                         onChange={(e) => setSelectedSize(e.target.value)}
                         disabled={isOutOfStock}
-                        className="rounded-md border border-gray-200 px-2 py-1 text-xs text-gray-700 disabled:opacity-50"
+                        className="rounded-md border border-gray-200 px-2 py-1 mx-2 text-xs text-gray-700 disabled:opacity-50"
                     >
-                        {safeSizes.map((size) => (
-                            <option key={size} value={size}>
-                                {size}
+                        {safeSizes.map((item) => (
+                            <option
+                                key={item.size}
+                                value={item.size}
+                                disabled={item.stock === 0}
+                            >
+                                {item.size}
+                                {item.stock === 0 ? ' (Out of stock)' : ''}
                             </option>
                         ))}
                     </select>

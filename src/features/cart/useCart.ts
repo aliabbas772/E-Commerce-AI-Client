@@ -43,7 +43,12 @@ export function useCart() {
       name: item.product.name,
       price: item.price,
       image: item.product.images?.[0] ?? "",
-      size: item.size,
+      sizes: [
+        {
+          size: item.size,
+          quantity: item.quantity,
+        },
+      ],
       quantity: item.quantity,
       stock: item.product.stock,
     }));
