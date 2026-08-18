@@ -6,6 +6,12 @@ services:
     container_name: ecommerce_client
     ports: 
       - 5173:80
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 512M
     env_file: 
       - .env
     volumes: 

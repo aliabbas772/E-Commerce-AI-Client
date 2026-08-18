@@ -8,6 +8,7 @@ export const GET_MY_ORDERS = gql`
         totalAmount
         paymentStatus
         deliveryStatus
+        invoiceUrl
         createdAt
         items {
           quantity

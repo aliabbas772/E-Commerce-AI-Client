@@ -59,6 +59,17 @@ const OrderDetailPage = () => {
                 </span>
             </div>
 
+            {order.invoiceUrl && (
+                <a
+                    href={order.invoiceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mb-6 inline-flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-gray-900 hover:underline"
+                >
+                    Download Invoice
+                </a>
+            )}
+
             <div className="mb-8 divide-y divide-gray-100 rounded-lg border border-gray-100">
                 {order.items.map((item: any, idx: number) => (
                     <div key={idx} className="flex items-center gap-4 p-4">

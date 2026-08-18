@@ -121,7 +121,7 @@ export default function NotificationBell() {
                                         <p className="mt-0.5 text-xs text-gray-500">{n.message}</p>
                                         <p className="mt-1 text-[11px] text-gray-400">
                                             {new Date(n.createdAt).toLocaleDateString('en-IN', {
-                                                day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
+                                                day: 'numeric', month: 'short', year: 'numeric'
                                             })}
                                         </p>
                                     </button>

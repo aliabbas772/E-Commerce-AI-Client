@@ -43,14 +43,9 @@ export function useCart() {
       name: item.product.name,
       price: item.price,
       image: item.product.images?.[0] ?? "",
-      sizes: [
-        {
-          size: item.size,
-          quantity: item.quantity,
-        },
-      ],
+      size: item.size,
       quantity: item.quantity,
-      stock: item.product.stock,
+      stock: item.product.sizes?.find((s: any) => s.size === item.size)?.stock,
     }));
   } else {
     items = guestItems;
