@@ -12,7 +12,7 @@ class NotificationSocket {
     if (this.ws?.readyState === WebSocket.OPEN) return;
 
     this.intentionallyClosed = false;
-    const wsUrl = `ws://localhost:4000/ws?token=${encodeURIComponent(token)}`;
+    const wsUrl = `${import.meta.env.VITE_GRAPHQL_WS_URL}/ws?token=${encodeURIComponent(token)}`;
     this.ws = new WebSocket(wsUrl);
 
     this.ws.onopen = () => {

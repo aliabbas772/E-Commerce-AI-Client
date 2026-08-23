@@ -12,7 +12,8 @@ import { REFRESH_TOKEN } from "../features/auth/queries";
 import { store } from "../store/store";
 import { login, logout } from "../store/slices/authSlice";
 
-const GRAPHQL_ENDPOINT = "http://localhost:4000/graphql";
+const GRAPHQL_ENDPOINT =
+  import.meta.env.VITE_GRAPHQL_HTTP_URL || "http://localhost:4000/graphql";
 
 const httpLink = createHttpLink({
   uri: GRAPHQL_ENDPOINT,
