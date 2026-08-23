@@ -9,8 +9,10 @@ export const GET_MY_WISHLIST = gql`
         name
         price
         images
-        sizes
+        sizes{
+        size
         stock
+        }
       }
     }
   }

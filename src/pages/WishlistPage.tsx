@@ -3,7 +3,7 @@ import { useWishlist } from '../features/wishlist/useWishlist'
 import ProductCard from '../components/ProductCard'
 
 export default function WishlistPage() {
-    const { products, loading } = useWishlist()
+    const { products, loading } = useWishlist();
 
     if (loading) {
         return <p className="px-6 py-24 text-center text-sm text-gray-500">Loading wishlist...</p>

@@ -10,6 +10,7 @@ interface WishlistButtonProps {
 
 export default function WishlistButton({ productId, size = 18, className = '' }: WishlistButtonProps) {
     const { isWishlisted, toggle, isAuthenticated } = useWishlist()
+
     const navigate = useNavigate()
 
     const handleClick = (e: React.MouseEvent) => {
@@ -23,7 +24,7 @@ export default function WishlistButton({ productId, size = 18, className = '' }:
         toggle(productId)
     }
 
-    const wishlisted = isWishlisted(productId)
+    const wishlisted = isWishlisted(productId);
 
     return (
         <button

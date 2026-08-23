@@ -20,8 +20,10 @@ export const SEARCH_PRODUCTS = gql`
         comparePrice
         images
         averageRating
+        sizes{
         stock
-        sizes
+        size
+        }
       }
       totalCount
       totalPages
