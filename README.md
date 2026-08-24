@@ -1,75 +1,90 @@
-# React + TypeScript + Vite
+# EcommerceAI — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend client for **EcommerceAI**, a full-stack e-commerce platform with AI-assisted shopping features. Built with Vite, React, TypeScript, and Tailwind CSS.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Build tool:** Vite
+- **Framework:** React + TypeScript
+- **Styling:** Tailwind CSS v4 (no UI library — fully custom components)
+- **State management:** Redux Toolkit
+- **Data layer:** Apollo Client v4 (GraphQL over HTTP + WebSocket subscriptions)
+- **Routing:** React Router
+- **Icons:** lucide-react
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Auth: email/password, OTP, Google OAuth, JWT refresh flow
+- Product catalog with per-size stock
+- Cart (guest + backend, merges on login)
+- Checkout via Razorpay
+- Order tracking and history
+- Wishlist
+- Product reviews
+- Real-time notifications (WebSocket)
+- AI outfit/size advisor
+- RAG-based support chat
+- Admin panel (products, categories, orders, users, analytics, audit logs)
 
-## Expanding the ESLint configuration
+## Prerequisites
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Node.js 18+
+- The [EcommerceAI backend](#) running and reachable (GraphQL HTTP + WS endpoints)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Getting Started
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+```bash
+# install dependencies
+npm install
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# copy env template and fill in values
+cp .env.example .env
 
+# start dev server
+npm run dev
+
+# production build
+npm run build
+
+# preview production build locally
+npm run preview
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Environment Variables
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Create a `.env` file in the project root with the following:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```shellscript
+VITE_GRAPHQL_HTTP_URL=
+VITE_GRAPHQL_WS_URL=
+VITE_RAZORPAY_KEY_ID=
+VITE_RECAPTCHA_SITE_KEY=
+VITE_GOOGLE_CLIENT_ID=
+```
 
+| Variable                  | Description                                                                           |
+| ------------------------- | ------------------------------------------------------------------------------------- |
+| `VITE_GRAPHQL_HTTP_URL`   | Backend GraphQL HTTP endpoint, e.g. `https://api.example.com/graphql`                 |
+| `VITE_GRAPHQL_WS_URL`     | Backend GraphQL WebSocket endpoint for subscriptions, e.g. `wss://api.example.com/ws` |
+| `VITE_RAZORPAY_KEY_ID`    | Razorpay **public** key ID used to open the checkout widget                           |
+| `VITE_RECAPTCHA_SITE_KEY` | Google reCAPTCHA v3 site key                                                          |
+| `VITE_GOOGLE_CLIENT_ID`   | Google OAuth client ID for "Sign in with Google"                                      |
+
+All variables are required for the app to function correctly — missing ones will cause GraphQL requests, checkout, captcha, or Google sign-in to fail silently or throw at runtime.
+
+## Deployment
+
+Configured for deployment on Netlify. Set the environment variables above in the Netlify site's build environment settings before deploying — Vite reads them at **build time**, so they must be present when `npm run build` runs, not just at runtime.
+
+## Project Structure
+
+```
+src/
+├── components/     # Reusable UI components
+├── pages/          # Route-level views
+├── redux/          # Redux Toolkit store, slices
+├── graphql/        # Apollo queries, mutations, subscriptions
+├── hooks/          # Custom hooks
+├── utils/          # Helpers
+└── types/          # TypeScript types
 ```
