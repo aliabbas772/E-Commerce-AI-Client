@@ -2,6 +2,8 @@
 
 Frontend client for **EcommerceAI**, a full-stack e-commerce platform with AI-assisted shopping features. Built with Vite, React, TypeScript, and Tailwind CSS.
 
+# Demo Url - https://aliys.netlify.app
+
 ## Tech Stack
 
 - **Build tool:** Vite
